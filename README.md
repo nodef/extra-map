@@ -1,5 +1,3 @@
-# map-extra
-
 [![NPM](https://nodei.co/npm/map-extra.png)](https://nodei.co/npm/map-extra/)
 
 Extra methods for [map].<br>
