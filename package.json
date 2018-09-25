@@ -1,6 +1,6 @@
 {
   "name": "extra-map",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Extra methods for map.",
   "main": "index.js",
   "scripts": {
