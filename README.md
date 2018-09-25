@@ -1,3 +1,6 @@
+# map-extra
+
+> [map-extra](https://www.npmjs.com/package/map-extra) was renamed to [extra-map](https://www.npmjs.com/package/extra-map).
 [![NPM](https://nodei.co/npm/map-extra.png)](https://nodei.co/npm/map-extra/)
 
 Extra methods for [map].<br>
