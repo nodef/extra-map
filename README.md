@@ -1,9 +1,8 @@
-Extra methods for [map].<br>
+Standard utility methods for [Map].<br>
 Browserified, minified module: [extra-map.min].
 
 ```javascript
-const extra = require('extra-map');
-// -> updated Map constructor
+const Map = require('extra-map');
 // Map.is(<value>)
 // Map.equal(<map1>, <map2>)
 // ...
@@ -46,7 +45,10 @@ Functional methods:
 - [reduce](https://www.npmjs.com/package/@extra-entries/reduce)
 - [filter](https://www.npmjs.com/package/@extra-map/filter)
 - [map](https://www.npmjs.com/package/@extra-map/map)
+<br>
 
 
-[map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+[![nodef](https://i.imgur.com/Ya1duvx.jpg)](https://nodef.github.io)
+
+[Map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
 [extra-map.min]: https://www.npmjs.com/package/extra-map.min

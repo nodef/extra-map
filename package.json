@@ -1,53 +1,52 @@
 {
   "name": "extra-map",
-  "version": "0.2.6",
-  "description": "Extra methods for map.",
+  "version": "1.0.3",
+  "description": "Standard utility methods for Map.",
   "main": "index.js",
   "scripts": {
+    "prepublishOnly": "node ./prepublish",
+    "browserify": "browserify index.js -o index.web.js -s Integer",
+    "uglifyjs": "uglifyjs -c -m -o index.min.js index.web.js",
     "test": "exit"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/extra-map/extra-map.git"
   },
   "keywords": [
     "extra",
     "map",
+    "standard",
+    "utility",
+    "method",
+    "manipulation",
+    "function",
     "merferry"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodef/extra-map.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nodef/extra-map/issues"
+  },
+  "homepage": "https://github.com/nodef/extra-map#readme",
   "author": "wolfram77@gmail.com",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/extra-map/extra-map/issues"
-  },
-  "homepage": "https://github.com/extra-map/extra-map#readme",
   "devDependencies": {
-    "@extra-entries/every": "^1.0.1",
-    "@extra-entries/find": "^1.0.1",
-    "@extra-entries/find-all": "^1.0.1",
-    "@extra-entries/find-all-keys": "^1.0.1",
-    "@extra-entries/find-key": "^1.0.1",
-    "@extra-entries/for-each": "^1.0.1",
-    "@extra-entries/includes": "^1.0.1",
-    "@extra-entries/join": "^1.0.1",
-    "@extra-entries/key-of": "^1.0.1",
-    "@extra-entries/keys-of": "^1.0.1",
-    "@extra-entries/reduce": "^1.0.1",
-    "@extra-entries/some": "^1.0.1",
-    "@extra-map/concat": "^1.0.1",
-    "@extra-map/contains": "^1.0.1",
-    "@extra-map/contains-keys": "^1.0.1",
-    "@extra-map/delete-all": "^1.0.1",
-    "@extra-map/equal": "^1.0.1",
-    "@extra-map/filter": "^1.0.1",
-    "@extra-map/from-lists": "^1.0.1",
-    "@extra-map/is": "^1.0.1",
-    "@extra-map/map": "^1.0.1",
-    "@extra-map/pick": "^1.0.1",
-    "@extra-map/pick-as": "^1.0.1",
-    "@extra-map/pick-values": "^1.0.1",
-    "@extra-map/pick-values-as": "^1.0.1",
-    "@extra-map/set-all": "^1.0.1",
-    "@extra-map/set-lists": "^1.0.1"
+    "@extra-entries/every": "^1.1.0",
+    "@extra-entries/find": "^1.1.0",
+    "@extra-entries/find-all": "^1.1.0",
+    "@extra-entries/find-all-keys": "^1.1.0",
+    "@extra-entries/find-key": "^1.1.0",
+    "@extra-entries/for-each": "^1.1.0",
+    "@extra-entries/includes": "^1.1.0",
+    "@extra-entries/join": "^1.1.0",
+    "@extra-entries/key-of": "^1.1.0",
+    "@extra-entries/keys-of": "^1.1.0",
+    "@extra-entries/reduce": "^1.1.0",
+    "@extra-entries/some": "^1.1.0",
+    "@extra-iterable/is-collection": "^1.1.0",
+    "browserify": "^16.2.3",
+    "find-npm-prefix": "^1.0.2",
+    "recast": "^0.16.1",
+    "tempy": "^0.2.1",
+    "uglify-es": "^3.3.9"
   }
 }
