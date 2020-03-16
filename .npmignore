@@ -1,7 +1,12 @@
-# jekyll config
-_config.yml
-
 # scripts
-scripts/
+src/
+
+# build
+build.js
 bundle.js
-prepublish.js
+.travis.yml
+
+# others
+unused/
+unused.js
+TODO
