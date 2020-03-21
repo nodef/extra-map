@@ -290,16 +290,8 @@ module.exports =  bundle;
 
 
 // Run on shell.
-async function shell(a) {
-  var files = [], o = {};
-  for(var i=2, I=a.length; i<I; i++) {
-    if(a[i]==='-?' || a[i]==='--help') { /* i am not a optimus */ }
-    else if(a[i]==='-d' || a[i]==='--dependencies') o.dependencies = true;
-    else if(a[i]==='-dd' || a[i]==='--dev_dependencies') o.devDependencies = true;
-    else if(a[i]==='-ad' || a[i]==='--all_dependencies') o.allDependencies = true;
-    else files.push(a[i]);
-  }
-  for(var fil of files)
-    console.log(await bundle(fil, o));
+async function main() {
+  var data = await bundle('src/index.js', {dependencies: true});
+  fs.writeFileSync('index.js', data);
 };
-if(require.main===module) shell(process.argv);
+main();
