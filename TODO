@@ -1,3 +1,28 @@
+.is(v)
+Checks if value is a map.
+
+.map(x, fn, ths=null)
+.map$(x, fn, ths=null)
+.mapTo(x, fn, ths=null, y)
+Updates values based on map function.
+
+.filter(x, fn, ths=null)
+.filter$(x, fn, ths=null)
+.filterTo(x, fn, ths=null, y)
+
+.concat(...xs)
+.union(...xs)
+.concat$(x, ...ys)
+.union$(x, ...ys)
+
+.getAll(x, ks) -> [vs] / Map {}
+.compare()
+.isEqual()
+.isDisjoint()...
+
+.fromLists()
+
+
 - is
 - set
 - swap
