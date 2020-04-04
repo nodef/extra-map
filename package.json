@@ -1,6 +1,6 @@
 {
   "name": "extra-map",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Standard utility methods for Map.",
   "main": "index.js",
   "scripts": {
@@ -40,10 +40,10 @@
     "@extra-entries/reduce": "^1.1.1",
     "@extra-entries/some": "^1.1.1",
     "@extra-iterable/is-collection": "^1.1.1",
-    "browserify": "^16.2.3",
+    "browserify": "^16.5.1",
     "find-npm-prefix": "^1.0.2",
-    "recast": "^0.16.1",
-    "tempy": "^0.2.1",
+    "recast": "^0.18.8",
+    "tempy": "^0.5.0",
     "uglify-es": "^3.3.9"
   }
 }
