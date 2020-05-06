@@ -1,5 +1,10 @@
+.reduce(reduce iterables together)
+
 .is(v)
 Checks if value is a map.
+
+.slice
+with compare function
 
 .map(x, fn, ths=null)
 .map$(x, fn, ths=null)

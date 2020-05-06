@@ -1,6 +1,6 @@
 {
   "name": "extra-map",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "Standard utility methods for Map.",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
   "author": "wolfram77@gmail.com",
   "license": "MIT",
   "devDependencies": {
+    "@extra-array/permutation-update": "^2.6.71",
     "@extra-entries/every": "^1.1.1",
     "@extra-entries/find": "^1.1.1",
     "@extra-entries/find-all": "^1.1.1",
@@ -40,6 +41,12 @@
     "@extra-entries/reduce": "^1.1.1",
     "@extra-entries/some": "^1.1.1",
     "@extra-iterable/is-collection": "^1.1.1",
+    "@extra-iterable/max": "^2.1.26",
+    "@extra-iterable/max-on": "^2.1.26",
+    "@extra-iterable/min": "^2.1.26",
+    "@extra-iterable/min-on": "^2.1.26",
+    "@extra-iterable/range": "^2.1.26",
+    "@extra-iterable/range-on": "^2.1.26",
     "browserify": "^16.5.1",
     "find-npm-prefix": "^1.0.2",
     "recast": "^0.18.8",
