@@ -1,20 +1,19 @@
 {
   "name": "extra-map",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "A map is a collection of key-value pairs, with unique keys.",
   "main": "index.js",
   "scripts": {
+    "einit": "ebuild init",
+    "ecode": "ebuild update --docs false",
+    "eupdate": "ebuild update",
+    "escatter": "ebuild scatter",
     "test": "exit"
   },
+  "runkitExampleFilename": "example.js",
   "keywords": [
     "extra",
-    "map",
-    "standard",
-    "utility",
-    "method",
-    "manipulation",
-    "function",
-    "merferry"
+    "map"
   ],
   "repository": {
     "type": "git",
@@ -47,11 +46,6 @@
     "@extra-iterable/min-on": "^2.1.28",
     "@extra-iterable/range": "^2.1.28",
     "@extra-iterable/range-on": "^2.1.28",
-    "browserify": "^16.5.1",
-    "extra-build": "^1.0.120",
-    "find-npm-prefix": "^1.0.2",
-    "recast": "^0.19.1",
-    "tempy": "^0.5.0",
-    "uglify-es": "^3.3.9"
+    "extra-build": "^1.0.120"
   }
 }
