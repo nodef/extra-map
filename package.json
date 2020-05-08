@@ -1,7 +1,7 @@
 {
   "name": "extra-map",
-  "version": "2.0.10",
-  "description": "Standard utility methods for Map.",
+  "version": "2.0.11",
+  "description": "A map is a collection of key-value pairs, with unique keys.",
   "main": "index.js",
   "scripts": {
     "test": "exit"

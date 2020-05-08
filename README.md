@@ -1,5 +1,4 @@
-Standard utility methods for [Map].<br>
-Browserified, minified module: [extra-map.min].
+A [map] is a collection of key-value pairs, with unique keys.
 
 ```javascript
 const Map = require('extra-map');
@@ -13,5 +12,5 @@ const Map = require('extra-map');
 
 [![nodef](https://i.imgur.com/Ya1duvx.jpg)](https://nodef.github.io)
 
-[Map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+[map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
 [extra-map.min]: https://www.npmjs.com/package/extra-map.min
