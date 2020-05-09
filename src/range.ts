@@ -1,4 +1,5 @@
 import iterableRange from '@extra-iterable/range';
+import cmp from './_cmp';
 import type {compareFn} from './_types';
 
 /**
@@ -8,6 +9,8 @@ import type {compareFn} from './_types';
  * @returns [min, max]
  */
 function range<K, V>(x: Iterable<[K, V]>, fn: compareFn<[K, V]>=null): [[K, V], [K, V]] {
-  return iterableRange(x, fn);
+  var fn = fn || cmp;
+  // @ts-ignore
+  return iterableRange(x, (a, b) => fn(a[1], b[1]));
 }
 export default range;

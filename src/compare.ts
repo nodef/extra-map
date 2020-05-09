@@ -19,3 +19,6 @@ function compare<K, V>(x: Map<K, V>, y: Map<K, V>, fn: compareFn<V>=null): numbe
   return 0;
 }
 export default compare;
+// compare-fn is still used to compare values,
+// and not entries, because we dont compare non-matching key
+// entries, and also this promotes reuse of esisting compare fns

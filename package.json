@@ -1,6 +1,6 @@
 {
   "name": "extra-map",
-  "version": "2.0.19",
+  "version": "2.0.20",
   "description": "A map is a collection of key-value pairs, with unique keys.",
   "main": "index.js",
   "scripts": {

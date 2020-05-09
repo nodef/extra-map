@@ -1,5 +1,5 @@
 /**
- * Lists all key-value pairs.
+ * Lists all entries.
  * @param x a map
  */
 function* entries<K, V>(x: Iterable<[K, V]>): IterableIterator<[K, V]> {

@@ -12,3 +12,5 @@ function union$<K, V>(x: Map<K, V>, ...ys: Iterable<[K, V]>[]): Map<K, V> {
   return x;
 }
 export default union$;
+// looking at compare() it feels like union() also
+// could accept a compare-fn for similar behaviour.

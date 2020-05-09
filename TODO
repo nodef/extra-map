@@ -1,3 +1,15 @@
+// compare-fn is still used to compare values,
+// and not entries, because we dont compare non-matching key
+// entries, and also this promotes reuse of esisting compare fns
+
+// looking at compare() it feels like union() also
+// could accept a compare-fn for similar behaviour.
+
+// submaps looks the flipped version of what i expected
+// but it works great
+
+// greay area isDisjoint (disjoint in what sense)
+
 .reduce(reduce iterables together)
 
 .is(v)

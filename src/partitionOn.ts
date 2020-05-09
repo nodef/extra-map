@@ -4,7 +4,7 @@ import type {mapFn} from './_types';
 /**
  * Segregates map keeping similar values together.
  * @param x an array
- * @param fn map function (v, i, x)
+ * @param fn map function (v, k, x)
  * @param ths this argument
  * @returns Map {key => values}
  */
