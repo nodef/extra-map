@@ -3,7 +3,7 @@ import tomaps from './_tomaps';
 /**
  * Checks if map is part of all maps.
  * @param x a map
- * @param y other maps
+ * @param ys other maps
  */
 function isSubmap<K, V>(x: Map<K, V>, ...ys: Iterable<[K, V]>[]): boolean {
   var ys1 = tomaps(ys);
