@@ -1,8 +1,8 @@
 /**
- * Gets size of map.
+ * Counts the number of values.
  * @param x a map
  */
-function size<K, V>(x: Map<K, V>): number {
+function size<T, U>(x: Map<T, U>): number {
   return x.size;
 }
 export default size;
