@@ -7,7 +7,7 @@ import type {mapFn} from './_types';
  * @param ths this argument
  * @returns x
  */
-function map$<K, V>(x: Map<K, V>, fn: mapFn<K, V, V>, ths: object=null): Map<K, V> {
+function map$<T, U>(x: Map<T, U>, fn: mapFn<T, U, U>, ths: object=null): Map<T, U> {
   for(var [k, v] of x)
     x.set(k, fn.call(ths, v, k, x));
   return x;
