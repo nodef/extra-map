@@ -1,7 +1,7 @@
 import type {testFn} from './_types';
 
 /**
- * Segregates map keeping similar values together.
+ * Segregates values by test result.
  * @param x a map
  * @param fn test function (v, k, x)
  * @param ths this argument
