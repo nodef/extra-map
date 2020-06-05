@@ -1,15 +1,15 @@
-import type {testFn} from './_types';
+import type {Entries, testFn} from './_types';
 
 /**
  * Counts values which satisfy a test.
- * @param x an iterable
- * @param fn test function (v, i, x)
+ * @param x a map
+ * @param fn test function (v, k, x)
  * @param ths this argument
  */
-function count<K, V>(x: Iterable<[K, V]>, fn: testFn<K, V>, ths: object=null): number {
-  var n = 0;
+function count<T, U>(x: Entries<T, U>, fn: testFn<T, U>, ths: object=null): number {
+  var a = 0;
   for(var [k, v] of x)
-    if(fn.call(ths, v, k, x)) n++;
-  return n;
+    if(fn.call(ths, v, k, x)) a++;
+  return a;
 }
 export default count;
