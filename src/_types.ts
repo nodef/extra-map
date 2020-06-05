@@ -1,4 +1,5 @@
 export type Entries<T, U>     = Iterable<[T, U]>;
+export type Lists<T, U>       = [Iterable<T>, Iterable<U>];
 export type compareFn<T>      = (a: T, b: T) => number;
 export type calledFn<T, U>    = (v: U, k: T, x: Entries<T, U>) => void;
 export type testFn<T, U>      = (v: U, k: T, x: Entries<T, U>) => boolean;

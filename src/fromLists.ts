@@ -1,9 +1,11 @@
+import type {Lists} from './_types';
+
 /**
  * Creates a map from lists.
- * @param ls lists [keys, values]
+ * @param ls lists
  */
-function fromLists<K, V>(ls: [Iterable<K>, Iterable<V>]): Map<K, V> {
-  var a = new Map<K, V>();
+function fromLists<T, U>(ls: Lists<T, U>): Map<T, U> {
+  var a = new Map<T, U>();
   var ks = ls[0][Symbol.iterator]();
   var vs = ls[1][Symbol.iterator]();
   while(true) {
