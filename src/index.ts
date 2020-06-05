@@ -3,7 +3,7 @@ export {default as compare} from './compare';
 export {default as concat$} from './concat$';
 export {default as concat} from './concat';
 export {default as count} from './count';
-export {default as countOn} from './countOn';
+export {default as countAs} from './countAs';
 export {default as difference$} from './difference$';
 export {default as difference} from './difference';
 export {default as entries} from './entries';
