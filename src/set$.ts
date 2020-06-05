@@ -5,7 +5,7 @@
  * @param v value
  * @returns x
  */
-function set$<K, V>(x: Map<K, V>, k: K, v: V): Map<K, V> {
+function set$<T, U>(x: Map<T, U>, k: T, v: U): Map<T, U> {
   return x.set(k, v);
 }
 export default set$;
