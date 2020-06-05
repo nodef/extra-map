@@ -35,7 +35,6 @@ export {default as isEqual} from './isEqual';
 export {default as isSubmap} from './isSubmap';
 export {default as isSupermap} from './isSupermap';
 export {default as isValue} from './isValue';
-export {default as isValueOn} from './isValueOn';
 export {default as keys} from './keys';
 export {default as length} from './length';
 export {default as map$} from './map$';
