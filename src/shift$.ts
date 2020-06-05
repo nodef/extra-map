@@ -1,12 +1,11 @@
 /**
  * Removes first value.
  * @param x a map (updated)
- * @returns [key, value]
+ * @returns x
  */
-function shift$<K, V>(x: Map<K, V>): [K, V] {
-  for(var [k, v] of x) {
+function shift$<T, U>(x: Map<T, U>): Map<T, U> {
+  for(var [k, v] of x)
     x.delete(k);
-    return [k, v];
-  }
+  return x;
 }
 export default shift$;
