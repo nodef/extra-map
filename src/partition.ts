@@ -8,8 +8,8 @@ import type {Entries, testFn} from './_types';
  * @returns [satisfies, doesnt]
  */
 function partition<T, U>(x: Entries<T, U>, fn: testFn<T, U>, ths: object=null): [Map<T, U>, Map<T, U>] {
-  var t = new Map<T, U>();
-  var f = new Map<T, U>();
+  var t = new Map();
+  var f = new Map();
   for(var [k, v] of x) {
     if(fn.call(ths, v, k, x)) t.set(k, v);
     else f.set(k, v);
