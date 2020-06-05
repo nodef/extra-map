@@ -8,7 +8,7 @@ import type {Entries, mapFn} from './_types';
  * @param ths this argument
  * @returns Map {key => values}
  */
-function partitionOn<T, U, V>(x: Entries<T, U>, fn: mapFn<T, U, U|V>=null, ths: object=null): Map<U|V, U[]> {
+function partitionAs<T, U, V>(x: Entries<T, U>, fn: mapFn<T, U, U|V>=null, ths: object=null): Map<U|V, U[]> {
   var fn = fn||id;
   var a = new Map<V, U[]>();
   for(var [k, v] of x) {
@@ -18,4 +18,4 @@ function partitionOn<T, U, V>(x: Entries<T, U>, fn: mapFn<T, U, U|V>=null, ths: 
   }
   return a;
 }
-export default partitionOn;
+export default partitionAs;
