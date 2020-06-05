@@ -4,7 +4,7 @@
  * @returns x
  */
 function shift$<T, U>(x: Map<T, U>): Map<T, U> {
-  for(var [k, v] of x)
+  for(var [k] of x)
     x.delete(k);
   return x;
 }
