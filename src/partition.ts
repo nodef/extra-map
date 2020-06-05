@@ -1,4 +1,4 @@
-import type {testFn} from './_types';
+import type {Entries, testFn} from './_types';
 
 /**
  * Segregates values by test result.
@@ -7,9 +7,9 @@ import type {testFn} from './_types';
  * @param ths this argument
  * @returns [satisfies, doesnt]
  */
-function partition<K, V>(x: Iterable<[K, V]>, fn: testFn<K, V>, ths: object=null): [Map<K, V>, Map<K, V>] {
-  var t = new Map<K, V>();
-  var f = new Map<K, V>();
+function partition<T, U>(x: Entries<T, U>, fn: testFn<T, U>, ths: object=null): [Map<T, U>, Map<T, U>] {
+  var t = new Map<T, U>();
+  var f = new Map<T, U>();
   for(var [k, v] of x) {
     if(fn.call(ths, v, k, x)) t.set(k, v);
     else f.set(k, v);
