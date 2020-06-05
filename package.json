@@ -1,6 +1,6 @@
 {
   "name": "extra-map",
-  "version": "2.0.20",
+  "version": "2.0.21",
   "description": "A map is a collection of key-value pairs, with unique keys.",
   "main": "index.js",
   "scripts": {
@@ -81,7 +81,7 @@
   "author": "wolfram77@gmail.com",
   "license": "MIT",
   "devDependencies": {
-    "@extra-array/permutation-update": "^2.6.77",
+    "@extra-array/permutation-update": "^2.8.41",
     "@extra-entries/every": "^1.1.1",
     "@extra-entries/find": "^1.1.1",
     "@extra-entries/find-all": "^1.1.1",
@@ -95,12 +95,12 @@
     "@extra-entries/reduce": "^1.1.1",
     "@extra-entries/some": "^1.1.1",
     "@extra-iterable/is-collection": "^1.1.1",
-    "@extra-iterable/max": "^2.1.28",
-    "@extra-iterable/max-on": "^2.1.28",
-    "@extra-iterable/min": "^2.1.28",
-    "@extra-iterable/min-on": "^2.1.28",
-    "@extra-iterable/range": "^2.1.28",
-    "@extra-iterable/range-on": "^2.1.28",
-    "extra-build": "^1.0.125"
+    "@extra-iterable/max": "^2.3.39",
+    "@extra-iterable/max-on": "^2.2.30",
+    "@extra-iterable/min": "^2.3.39",
+    "@extra-iterable/min-on": "^2.2.30",
+    "@extra-iterable/range": "^2.3.39",
+    "@extra-iterable/range-on": "^2.2.30",
+    "extra-build": "^1.0.173"
   }
 }
