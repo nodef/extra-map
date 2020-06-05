@@ -1,13 +1,13 @@
+import type {Entries} from './_types';
+
 /**
  * Fills with given value.
- * @param x an array
+ * @param x a map
  * @param v value
- * @param i start index (0)
- * @param I end index (end)
  */
-function fill<K, V>(x: Iterable<[K, V]>, v: V): Map<K, V> {
-  var a = new Map<K, V>();
-  for(var [k, _] of x)
+function fill<T, U>(x: Entries<T, U>, v: U): Map<T, U> {
+  var a = new Map();
+  for(var [k] of x)
     a.set(k, v);
   return a;
 }
