@@ -4,8 +4,8 @@
  * @param v value
  * @returns x
  */
-function fill$<K, V>(x: Map<K, V>, v: V): Map<K, V> {
-  for(var [k, _] of x)
+function fill$<T, U>(x: Map<T, U>, v: U): Map<T, U> {
+  for(var [k] of x)
     x.set(k, v);
   return x;
 }
