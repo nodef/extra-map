@@ -11,10 +11,10 @@ function* submaps<K, V>(x: Map<K, V>, n: number=-1): IterableIterator<Map<K, V>>
   if(n>=X) { if(n==X) yield x; return; }
   if(n===0 || X===0) { yield new Map<K, V>(); return; }
   var [e, y] = shift(x);
-  yield* submaps(y, n);
-  for(var m of submaps(y, n-1)) {
+  yield* submaps(y as any, n);
+  for(var m of submaps(y as any, n-1)) {
     m.set(e[0], e[1]);
-    yield m;
+    yield m as any;
   }
 }  
 export default submaps;
