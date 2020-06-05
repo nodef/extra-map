@@ -6,7 +6,8 @@ import type {Entries, compareFn, mapFn} from './_types';
  * Searches a value.
  * @param x a map
  * @param v search value
- * @param fn compare function (a, b)
+ * @param fc compare function (a, b)
+ * @param fm map function (v, k, x)
  * @returns key of value
  */
 function search<T, U, V=U>(x: Entries<T, U>, v: U, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): T {
