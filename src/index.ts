@@ -45,7 +45,7 @@ export {default as maxOn} from './maxOn';
 export {default as min} from './min';
 export {default as minOn} from './minOn';
 export {default as partition} from './partition';
-export {default as partitionOn} from './partitionOn';
+export {default as partitionAs} from './partitionAs';
 export {default as range} from './range';
 export {default as rangeOn} from './rangeOn';
 export {default as reduce} from './reduce';
