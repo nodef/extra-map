@@ -1,8 +1,10 @@
+import type {Entries} from './_types';
+
 /**
  * Creates a map from entries.
- * @param es entries [[key, value]]
+ * @param es entries
  */
-function from<K, V>(es: Iterable<[K, V]>): Map<K, V> {
-  return new Map<K, V>(es);
-};
+function from<T, U>(es: Entries<T, U>): Map<T, U> {
+  return new Map<T, U>(es);
+}
 export default from;
