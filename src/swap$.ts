@@ -5,7 +5,7 @@
  * @param l another key
  * @returns x
  */
-function swap$<K, V>(x: Map<K, V>, k: K, l: K): Map<K, V> {
+function swap$<T, U>(x: Map<T, U>, k: T, l: T): Map<T, U> {
   var t = x.get(k);
   x.set(k, x.get(l));
   x.set(l, t);
