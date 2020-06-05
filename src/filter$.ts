@@ -7,7 +7,7 @@ import type {testFn} from './_types';
  * @param ths this argument
  * @returns x
  */
-function filter$<K, V>(x: Map<K, V>, fn: testFn<K, V>, ths: object=null): Map<K, V> {
+function filter$<T, U>(x: Map<T, U>, fn: testFn<T, U>, ths: object=null): Map<T, U> {
   for(var [k, v] of x)
     if(!fn.call(ths, v, k, x)) x.delete(k);
   return x;
