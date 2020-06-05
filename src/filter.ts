@@ -1,17 +1,15 @@
-import type {testFn} from './_types';
+import type {Entries, testFn} from './_types';
 
 /**
- * Keeps values which pass a test.
+ * Keeps the values which pass a test.
  * @param x a map
  * @param fn test function (v, k, x)
  * @param ths this argument
  */
-function filter<K, V>(x: Iterable<[K, V]>, fn: testFn<K, V>, ths: object=null): Map<K, V> {
-  var a = new Map<K, V>();
+function filter<T, U>(x: Entries<T, U>, fn: testFn<T, U>, ths: object=null): Map<T, U> {
+  var a = new Map();
   for(var [k, v] of x)
     if(fn.call(ths, v, k, x)) a.set(k, v);
   return a;
 }
 export default filter;
-// do you want to implement filterTo here?
-// i.e., a as input argument

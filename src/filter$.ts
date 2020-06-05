@@ -1,7 +1,7 @@
 import type {testFn} from './_types';
 
 /**
- * Keeps values which pass a test.
+ * Keeps the values which pass a test.
  * @param x a map (updated)
  * @param fn test function (v, k, x)
  * @param ths this argument
