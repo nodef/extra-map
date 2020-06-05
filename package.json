@@ -1,8 +1,13 @@
 {
   "name": "extra-map",
-  "version": "2.0.21",
+  "version": "2.0.22",
   "description": "A map is a collection of key-value pairs, with unique keys.",
   "main": "index.js",
+  "module": "index.mjs",
+  "exports": {
+    "require": "./index.js",
+    "import": "./index.mjs"
+  },
   "scripts": {
     "einit": "ebuild init",
     "ecode": "ebuild update --docs false",
