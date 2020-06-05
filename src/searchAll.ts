@@ -1,5 +1,6 @@
+import id from './_id';
 import cmp from './_cmp';
-import type {compareFn} from './_types';
+import type {Entries, compareFn, mapFn} from './_types';
 
 /**
  * Searches a value throughout.
@@ -9,10 +10,13 @@ import type {compareFn} from './_types';
  * @param fm map function (v, k, x)
  * @returns keys of value
  */
-function searchAll<K, V>(x: Iterable<[K, V]>, v: V, fc: compareFn<V>=null): K[] {
-  var fc = fc||cmp, a: K[] = [];
-  for(var [k, u] of x)
-    if(fc(u, v)===0) a.push(k);
+function searchAll<T, U, V=U>(x: Entries<T, U>, v: U, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): T[] {
+  var fc = fc||cmp, fm = fm||id;
+  var v1 = fm(v, null, null), a: T[] = [];
+  for(var [k, u] of x) {
+    var u1 = fm(u, k, x);
+    if(fc(u1, v1)===0) a.push(k);
+  }
   return a;
 }
 export default searchAll;
