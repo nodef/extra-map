@@ -1,5 +1,6 @@
+import id from './_id';
 import cmp from './_cmp';
-import type {compareFn} from './_types';
+import type {Entries, compareFn, mapFn} from './_types';
 
 /**
  * Searches a value.
@@ -8,9 +9,12 @@ import type {compareFn} from './_types';
  * @param fn compare function (a, b)
  * @returns key of value
  */
-function search<K, V>(x: Iterable<[K, V]>, v: V, fn: compareFn<V>=null): K {
-  var fn = fn||cmp;
-  for(var [k, u] of x)
-    if(fn(u, v)===0) return k;
+function search<T, U, V=U>(x: Entries<T, U>, v: U, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): T {
+  var fc = fc||cmp, fm = fm||id;
+  var v1 = fm(v, null, null);
+  for(var [k, u] of x) {
+    var u1 = fm(u, k, x);
+    if(fc(u1, v1)===0) return k;
+  }
 }
 export default search;
