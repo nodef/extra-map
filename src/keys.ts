@@ -1,11 +1,8 @@
-import {Entries} from './_types';
-
 /**
  * Lists all keys.
  * @param x a map
  */
-function* keys<T, U>(x: Entries<T, U>): IterableIterator<T> {
-  for(var [k] of x)
-    yield k;
+function* keys<T, U>(x: Map<T, U>): IterableIterator<T> {
+  yield* x.keys();
 }
 export default keys;
