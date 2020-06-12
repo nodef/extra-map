@@ -1,13 +1,15 @@
+import type {Entries} from './_types';
+
 /**
- * Appends maps to the end.
- * @param x a map (updated)
- * @param ys maps to append
+ * Combines entries from maps, preferring last.
+ * @param x a maps (updated)
+ * @param ys other maps
  * @returns x
  */
-function concat$<K, V>(x: Map<K, V>, ...ys: Iterable<[K, V]>[]): Map<K, V> {
+function concat$<T, U>(x: Map<T, U>, ...ys: Entries<T, U>[]): Map<T, U> {
   for(var y of ys) {
     for(var [k, v] of y)
-      x.set(k ,v);
+      x.set(k, v);
   }
   return x;
 }
