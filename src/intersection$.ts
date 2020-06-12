@@ -1,4 +1,5 @@
 import id from './_id';
+import rejectAt$ from './rejectAt$';
 import type {combineFn} from './_types';
 
 /**
@@ -9,11 +10,11 @@ import type {combineFn} from './_types';
  * @returns x
  */
 function intersection$<T, U>(x: Map<T, U>, y: Map<T, U>, fn: combineFn<U>=null): Map<T, U> {
-  var fn = fn||id;
-  for(var [k, u] of x) {
-    if(!y.has(k)) x.delete(k);
+  var fn = fn||id, ks = [];
+  for(var [k, u] of [...x]) {
+    if(!y.has(k)) ks.push(k);
     x.set(k, fn(u, y.get(k)));
   }
-  return x;
+  return rejectAt$(x, ks);
 }
 export default intersection$;

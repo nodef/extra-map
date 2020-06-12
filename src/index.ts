@@ -22,7 +22,6 @@ export {default as flat} from './flat';
 export {default as flatMap} from './flatMap';
 export {default as forEach} from './forEach';
 export {default as from} from './from';
-export {default as fromEntries} from './fromEntries';
 export {default as fromLists} from './fromLists';
 export {default as get} from './get';
 export {default as head} from './head';
