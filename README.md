@@ -106,7 +106,6 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 [rollup]: https://www.npmjs.com/package/rollup
 [uglify-js]: https://www.npmjs.com/package/uglify-js
 [:running:]: https://npm.runkit.com/extra-map
-[:vhs:]: https://asciinema.org/a/WJjGsG2nIv4dL3aK5VD0A2N9r
 [:package:]: https://www.npmjs.com/package/extra-map
 [:moon:]: https://www.npmjs.com/package/extra-map.min
 [:ledger:]: https://unpkg.com/extra-map/
