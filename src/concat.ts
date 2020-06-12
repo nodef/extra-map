@@ -1,10 +1,11 @@
 import concat$ from './concat$';
+import type {Entries} from './_types';
 
 /**
- * Appends maps together.
- * @param xs maps to append
+ * Combines entries from maps, preferring last.
+ * @param xs maps
  */
-function concat<K, V>(...xs: Iterable<[K, V]>[]): Map<K, V> {
-  return concat$(new Map<K, V>(), ...xs);
+function concat<T, U>(...xs: Entries<T, U>[]): Map<T, U> {
+  return concat$(new Map(), ...xs);
 }
 export default concat;
