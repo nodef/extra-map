@@ -1,14 +1,7 @@
+import id from './_id';
 import is from './is';
-import type {mapFn} from './_types';
-
-function flatMapTo<K>(x: Iterable<[K, any]>, fn: mapFn<K, any, any>, ths: object, a: Map<K, any>): Map<K, any> {
-  for(var [k, u] of x) {
-    var v = fn(u, k, x);
-    if(is(v)) flatMapTo(v, fn, ths, a);
-    else a.set(k, v);
-  }
-  return a;
-}
+import concat$ from './concat$';
+import type {mapFn, Entries} from './_types';
 
 /**
  * Flattens nested map, using map function.
@@ -16,7 +9,14 @@ function flatMapTo<K>(x: Iterable<[K, any]>, fn: mapFn<K, any, any>, ths: object
  * @param fn map function (v, k, x)
  * @param ths this argument
  */
-function flatMap<K, V, W>(x: Iterable<[K, any]>, fn: mapFn<K, V, W>, ths: object=null): Map<K, W> {
-  return flatMapTo(x, fn, ths, new Map<K, any>());
+function flatMap<T>(x: Entries<T, any>, fn: mapFn<T, any, any>=null, ths: object=null): Map<T, any> {
+  var fn = fn||id;
+  var a = new Map();
+  for(var [k, v] of x) {
+    var v1 = fn.call(ths, v, k, x);
+    if(is(v1)) concat$(a, v1);
+    else a.set(k, v1);
+  }
+  return a;
 }
 export default flatMap;
