@@ -1,5 +1,5 @@
 /**
- * Counts the number of values.
+ * Gets size of map.
  * @param x a map
  */
 function size<T, U>(x: Map<T, U>): number {
