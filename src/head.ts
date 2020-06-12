@@ -1,9 +1,12 @@
+import type {Entries} from './_types';
+
 /**
- * Gets an entry.
+ * Gets first entry.
  * @param x a map
  */
-function head<K, V>(x: Iterable<[K, V]>): [K, V] {
-  for(var e of x)
-    return e;
+function head<T, U>(x: Entries<T, U>): [T, U] {
+  for(var [k, v] of x)
+    return [k, v];
+  return [undefined, undefined];
 }
 export default head;
