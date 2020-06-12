@@ -1,4 +1,4 @@
-export {default as chunk} from './chunk';
+export {default as chunk} from './_chunk';
 export {default as compare} from './compare';
 export {default as concat$} from './concat$';
 export {default as concat} from './concat';
