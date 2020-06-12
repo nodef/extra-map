@@ -1,13 +1,14 @@
 import compare from './compare';
-import type {compareFn} from './_types';
+import type {compareFn, mapFn} from './_types';
 
 /**
  * Checks if two maps are equal.
  * @param x a map
  * @param y another map
- * @param fn compare function (a, b)
+ * @param fc compare function (a, b)
+ * @param fm map function (v, k, x)
  */
-function isEqual<K, V>(x: Map<K, V>, y: Map<K, V>, fn: compareFn<V>=null): boolean {
-  return compare(x, y, fn)===0;
+function isEqual<T, U, V=U>(x: Map<T, U>, y: Map<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
+  return x.size===y.size && compare(x, y, fc, fm)===0;
 }
 export default isEqual;
