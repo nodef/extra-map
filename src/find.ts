@@ -1,12 +1,12 @@
-import type {testFn} from './_types';
+import type {testFn, Entries} from './_types';
 
 /**
- * Finds a value passing the test.
+ * Finds value of an entry passing a test.
  * @param x a map
  * @param fn test function (v, k, x)
  * @param ths this argument
  */
-function find<K, V>(x: Iterable<[K, V]>, fn: testFn<K, V>, ths: object=null): V {
+function find<T, U>(x: Entries<T, U>, fn: testFn<T, U>, ths: object=null): U {
   for(var [k, v] of x)
     if(fn.call(ths, v, k, x)) return v;
 }
