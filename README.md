@@ -146,3 +146,4 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 [find]: https://github.com/nodef/extra-map/wiki/find
 [search]: https://github.com/nodef/extra-map/wiki/search
 [scanWhile]: https://github.com/nodef/extra-map/wiki/scanWhile
+[:vhs:]: https://asciinema.org/a/338986
