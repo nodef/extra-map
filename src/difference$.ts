@@ -1,13 +1,12 @@
 /**
- * Gives entries of a map not present in others.
+ * Gives entries of map not present in another.
  * @param x a map (updated)
- * @param ys other maps
+ * @param y another map
+ * @returns x
  */
-function difference$<K, V>(x: Map<K, V>, ...ys: Iterable<[K, V]>[]): Map<K, V> {
-  for(var y of ys) {
-    for(var [k, _] of y)
-      x.delete(k);
-  }
+function difference$<T, U>(x: Map<T, U>, y: Map<T, U>): Map<T, U> {
+  for(var k of y.keys())
+    x.delete(k);
   return x;
 }
 export default difference$;
