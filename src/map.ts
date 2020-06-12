@@ -6,7 +6,7 @@ import type {Entries, mapFn} from './_types';
  * @param fn map function (v, k, x)
  * @param ths this argument
  */
-function map<T, U, V>(x: Entries<T, U>, fn: mapFn<T, U, U|V>, ths: object=null): Map<T, U|V> {
+function map<T, U, V=U>(x: Entries<T, U>, fn: mapFn<T, U, U|V>, ths: object=null): Map<T, U|V> {
   var a = new Map();
   for(var [k, v] of x)
     a.set(k, fn.call(ths, v, k, x));
