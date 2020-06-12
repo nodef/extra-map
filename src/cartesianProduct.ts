@@ -6,18 +6,18 @@ import type {mapFn} from './_types';
  * @param xs maps
  * @param fn map function (v)
  */
-function* cartesianProduct<T, U, V=U>(xs: Map<T, U>[], fn: mapFn<T, U, U|V>=null): IterableIterator<U|V> {
+function* cartesianProduct<T, U, V=U>(xs: Map<T, U>[], fn: mapFn<T, Map<T, U>, Map<T, U>|V>=null): IterableIterator<Map<T, U>|V> {
   var fn = fn||id;
   var XS  = xs.length;
-  var kss = xs.map(x => Object.keys(x));
+  var kss = xs.map(x => [...x.keys()]);
   var ls = kss.map(ks => ks.length);
   var is = kss.map(ks => 0);
   while(true) {
-    var a = {};
+    var a = new Map<T, U>();
     for(var n=0; n<XS; n++) {
       var i  = is[n],  x = xs[n];
       var ks = kss[n], k = ks[i];
-      a[k] = x[k];
+      a.set(k, x.get(k));
     }
     yield fn(a, null, null);
     for(var r=XS-1; r>=0; r--) {
