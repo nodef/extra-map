@@ -1,7 +1,7 @@
-import type {Entries, testFn} from './_types';
+import type {testFn, Entries} from './_types';
 
 /**
- * Keeps the values which pass a test.
+ * Keeps entries which pass a test.
  * @param x a map
  * @param fn test function (v, k, x)
  * @param ths this argument
