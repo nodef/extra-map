@@ -1,11 +1,11 @@
+import drop$ from './drop$';
+
 /**
- * Removes first value.
+ * Removes first entry.
  * @param x a map (updated)
  * @returns x
  */
 function shift$<T, U>(x: Map<T, U>): Map<T, U> {
-  for(var [k] of x)
-    x.delete(k);
-  return x;
+  return drop$(x, 1);
 }
 export default shift$;
