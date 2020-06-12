@@ -1,16 +1,19 @@
+import id from './_id';
+import type {combineFn} from './_types';
+
 /**
  * Gives entries present in any map.
  * @param x a map (updated)
- * @param ys other maps
+ * @param y another map
+ * @param fn combine function (a, b)
  * @returns x
  */
-function union$<K, V>(x: Map<K, V>, ...ys: Iterable<[K, V]>[]): Map<K, V> {
-  for(var y of ys) {
-    for(var [k, v] of y)
-      if(!x.has(k)) x.set(k, v);
+function union$<T, U>(x: Map<T, U>, y: Map<T, U>, fn: combineFn<U>=null): Map<T, U> {
+  var fn = fn||id;
+  for(var [k, v] of y) {
+    if(!x.has(k)) x.set(k, v);
+    else x.set(k, fn(x.get(k), v));
   }
   return x;
 }
 export default union$;
-// looking at compare() it feels like union() also
-// could accept a compare-fn for similar behaviour.
