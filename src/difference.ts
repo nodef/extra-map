@@ -1,11 +1,12 @@
-import difference$ from './difference$';
-
 /**
- * Gives entries of a map not present in others.
+ * Gives entries of map not present in another.
  * @param x a map
- * @param ys other maps
+ * @param y another map
  */
-function difference<K, V>(x: Iterable<[K, V]>, ...ys: Iterable<[K, V]>[]): Map<K, V> {
-  return difference$(new Map<K, V>(x), ...ys);
+function difference<T, U>(x: Map<T, U>, y: Map<T, U>): Map<T, U> {
+  var a = new Map();
+  for(var [k, v] of x)
+    if(!y.has(k)) a.set(k, v);
+  return a;
 }
 export default difference;
