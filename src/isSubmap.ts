@@ -1,15 +1,21 @@
-import tomaps from './_tomaps';
+import id from './_id';
+import cmp from './_cmp';
+import type {compareFn, mapFn} from './_types';
 
 /**
- * Checks if map is part of all maps.
+ * Checks if map has a submap.
  * @param x a map
- * @param ys other maps
+ * @param y submap?
+ * @param fc compare function (a, b)
+ * @param fm map function (v, k, x)
  */
-function isSubmap<K, V>(x: Map<K, V>, ...ys: Iterable<[K, V]>[]): boolean {
-  var ys1 = tomaps(ys);
-  for(var y of ys1) {
-    for(var [k, v] of x)
-      if(y.get(k)!==v) return false;
+function isSubmap<T, U, V=U>(x: Map<T, U>, y: Map<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
+  var fc = fc||cmp, fm = fm||id;
+  for(var [k, v] of y) {
+    if(!x.has(k)) return false;
+    var u1 = fm(x.get(k), k, x);
+    var v1 = fm(v, k, y);
+    if(fc(u1, v1)!==0) return false;
   }
   return true;
 }

@@ -1,5 +1,5 @@
-import search from './search';
-import type {Entries, compareFn, mapFn} from './_types';
+import searchValue from './searchValue';
+import type {compareFn, mapFn, Entries} from './_types';
 
 /**
  * Checks if map has a value.
@@ -9,6 +9,6 @@ import type {Entries, compareFn, mapFn} from './_types';
  * @param fm map function (v, k, x)
  */
 function isValue<T, U, V=U>(x: Entries<T, U>, v: U, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
-  return search(x, v, fc, fm)!==undefined;
+  return searchValue(x, v, fc, fm)!==undefined;
 }
 export default isValue;
