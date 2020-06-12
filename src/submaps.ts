@@ -1,20 +1,13 @@
-import shift from './shift';
+import filterAt from './filterAt';
+import {subsequences} from 'extra-array';
 
 /**
- * Lists all submaps of a map.
+ * Lists all possible submaps.
  * @param x a map
  * @param n number of entries (-1 => any)
- * @returns ...submaps
  */
-function* submaps<K, V>(x: Map<K, V>, n: number=-1): IterableIterator<Map<K, V>> {
-  var X = x.size;
-  if(n>=X) { if(n==X) yield x; return; }
-  if(n===0 || X===0) { yield new Map<K, V>(); return; }
-  var [e, y] = shift(x);
-  yield* submaps(y as any, n);
-  for(var m of submaps(y as any, n-1)) {
-    m.set(e[0], e[1]);
-    yield m as any;
-  }
-}  
+function* submaps<T, U>(x: Map<T, U>, n: number=-1): IterableIterator<Map<T, U>> {
+  for(var ks of subsequences([...x.keys()], n))
+    yield filterAt(x, ks);
+}
 export default submaps;
