@@ -1,6 +1,6 @@
 {
   "name": "extra-map",
-  "version": "2.0.74",
+  "version": "2.0.75",
   "description": "A map is a collection of key-value pairs, with unique keys.",
   "main": "index.js",
   "module": "index.mjs",
@@ -86,6 +86,7 @@
   "author": "wolfram77@gmail.com",
   "license": "MIT",
   "devDependencies": {
+    "extra-array": "^2.8.75",
     "extra-build": "^1.0.177"
   }
 }
