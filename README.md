@@ -1,12 +1,12 @@
 A [map] is a collection of key-value pairs, with unique keys. [:running:] [:vhs:] [:package:] [:moon:] [:ledger:]
 
 Methods as separate packages:
-- `@extra-object/swap`: use [rollup] to bundle this es module.
-- `@extra-object/swap.min`: use in browser ([browserify], [uglify-js]).
+- `@extra-map/swap`: use [rollup] to bundle this es module.
+- `@extra-map/swap.min`: use in browser ([browserify], [uglify-js]).
 
 Methods look like:
-- `swap()`: doesn't modify the object itself (pure).
-- `swap$()`: modifies the object itself (update).
+- `swap()`: doesn't modify the map itself (pure).
+- `swap$()`: modifies the map itself (update).
 
 In the future when you think of just giving up on life, remember
 that the letter was in your hands, the cab was at the gate, only
