@@ -1,6 +1,7 @@
 import is from './is';
+import type {Entries} from './_types';
 
-function flatTo<K>(x: Iterable<[K, any]>, dep: number, a: Map<K, any>): Map<K, any> {
+function flatTo<T>(x: Entries<T, any>, dep: number, a: Map<T, any>): Map<T, any> {
   for(var [k, v] of x) {
     if(dep!==0 && is(v)) flatTo(v, dep-1, a);
     else a.set(k, v);
@@ -13,7 +14,7 @@ function flatTo<K>(x: Iterable<[K, any]>, dep: number, a: Map<K, any>): Map<K, a
  * @param x a nested map
  * @param dep maximum depth (-1)
  */
-function flat<K>(x: Iterable<[K, any]>, dep: number=-1): Map<K, any> {
-  return flatTo(x, dep, new Map<K, any>());
+function flat<T>(x: Entries<T, any>, dep: number=-1): Map<T, any> {
+  return flatTo(x, dep, new Map());
 }
 export default flat;
