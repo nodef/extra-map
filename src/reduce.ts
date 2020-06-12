@@ -1,15 +1,15 @@
-import type {reduceFn} from './_types';
+import type {reduceFn, Entries} from './_types';
 
 /**
- * Reduce all values to one value.
+ * Reduces values to a single value.
  * @param x a map
  * @param fn reduce function (acc, v, k, x)
  * @param acc initial value
  */
-function reduce<K, V, W>(x: Iterable<[K, V]>, fn: reduceFn<K, V, W>, acc?: W) {
+function reduce<T, U, V=U>(x: Entries<T, U>, fn: reduceFn<T, U, U|V>, acc?: U|V): U|V {
   var init = arguments.length <= 2;
   for(var [k, v] of x) {
-    if(init) { init = false; acc = v as any as W; }
+    if(init) { acc = v; init = false; }
     else acc = fn(acc, v, k, x);
   }
   return acc;
