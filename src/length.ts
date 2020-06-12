@@ -2,7 +2,7 @@
  * Gets size of map.
  * @param x a map
  */
-function length<K, V>(x: Map<K, V>): number {
+function length<T, U>(x: Map<T, U>): number {
   return x.size;
 }
 export default length;
