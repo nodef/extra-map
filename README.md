@@ -87,7 +87,7 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 | [key]                 | Picks an arbitrary key.
 | [value]               | Picks an arbitrary value.
 | [entry]               | Picks an arbitrary entry.
-| [subobject]           | Picks an arbitrary subobject.
+| [submap]              | Picks an arbitrary submap.
 |                       | 
 | [isEmpty]             | Checks if map is empty.
 | [isEqual]             | Checks if two maps are equal.
@@ -147,3 +147,4 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 [search]: https://github.com/nodef/extra-map/wiki/search
 [scanWhile]: https://github.com/nodef/extra-map/wiki/scanWhile
 [:vhs:]: https://asciinema.org/a/338986
+[submap]: https://github.com/nodef/extra-map/wiki/submap
