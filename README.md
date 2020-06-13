@@ -139,12 +139,11 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 [key]: https://github.com/nodef/extra-map/wiki/key
 [value]: https://github.com/nodef/extra-map/wiki/value
 [entry]: https://github.com/nodef/extra-map/wiki/entry
-[subobject]: https://github.com/nodef/extra-map/wiki/subobject
 [isEmpty]: https://github.com/nodef/extra-map/wiki/isEmpty
 [isEqual]: https://github.com/nodef/extra-map/wiki/isEqual
 [compare]: https://github.com/nodef/extra-map/wiki/compare
 [find]: https://github.com/nodef/extra-map/wiki/find
 [search]: https://github.com/nodef/extra-map/wiki/search
 [scanWhile]: https://github.com/nodef/extra-map/wiki/scanWhile
-[:vhs:]: https://asciinema.org/a/338986
 [submap]: https://github.com/nodef/extra-map/wiki/submap
+[:vhs:]: https://asciinema.org/a/338986
