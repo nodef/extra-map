@@ -92,7 +92,7 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 | [isEmpty]             | Checks if map is empty.
 | [isEqual]             | Checks if two maps are equal.
 | [compare]             | Compares two maps.
-| [find]                | Finds value of an entry passing a test.
+| [find]                | Finds a value passing a test.
 | [search]              | Finds key of an entry passing a test.
 | [scanWhile]           | Finds key of first entry not passing a test.
 

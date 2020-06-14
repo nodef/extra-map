@@ -6,7 +6,7 @@ import type {testFn, Entries} from './_types';
  * @param fn test function (v, k, x)
  * @param ths this argument
  */
-function searchAll<T, U>(x: Map<T, U>, fn: testFn<T, U>, ths: object=null): T[] {
+function searchAll<T, U>(x: Entries<T, U>, fn: testFn<T, U>, ths: object=null): T[] {
   var a = [];
   for(var [k, v] of x)
     if(fn.call(ths, v, k, x)) a.push(k);
