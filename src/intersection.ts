@@ -1,5 +1,5 @@
 import id from './_id';
-import type {combineFn} from './_types';
+import type {combineFn, Entries} from './_types';
 
 /**
  * Gives entries present in both maps.
@@ -7,12 +7,12 @@ import type {combineFn} from './_types';
  * @param y another map
  * @param fn combine function (a, b)
  */
-function intersection<T, U>(x: Map<T, U>, y: Map<T, U>, fn: combineFn<U>=null): Map<T, U> {
+function intersection<T, U>(x: Map<T, U>, y: Entries<T, U>, fn: combineFn<U>=null): Map<T, U> {
   var fn = fn||id;
   var a = new Map();
-  for(var [k, u] of x) {
-    if(!y.has(k)) continue;
-    a.set(k, fn(u, y.get(k)));
+  for(var [k, v] of y) {
+    if(!x.has(k)) a.set(k, v);
+    else a.set(k, fn(x.get(k), v));
   }
   return a;
 }
