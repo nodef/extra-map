@@ -11,7 +11,7 @@ function intersection<T, U>(x: Map<T, U>, y: Entries<T, U>, fn: combineFn<U>=nul
   var fn = fn||id;
   var a = new Map();
   for(var [k, v] of y)
-    if(!x.has(k)) a.set(k, fn(x.get(k), v));
+    if(x.has(k)) a.set(k, fn(x.get(k), v));
   return a;
 }
 export default intersection;
