@@ -5,9 +5,8 @@ import type {testFn, Entries} from './_types';
  * Checks if all values satisfy a test.
  * @param x a map
  * @param fn test function (v, k, x)
- * @param ths this argument
  */
-function every<T, U>(x: Entries<T, U>, fn: testFn<T, U>, ths: object=null): boolean {
-  return scanWhile(x, fn, ths)===undefined;
+function every<T, U>(x: Entries<T, U>, fn: testFn<T, U>): boolean {
+  return scanWhile(x, fn)===undefined;
 }
 export default every;
