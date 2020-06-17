@@ -1,18 +1,12 @@
-import unionKeys from './unionKeys';
+import symmetricDifference$ from './symmetricDifference$';
+import type {Entries} from './_types';
 
 /**
  * Gives entries not present in both maps.
  * @param x a map
  * @param y another map
  */
-function symmetricDifference<T, U>(x: Map<T, U>, y: Map<T, U>): Map<T, U> {
-  var a = new Map();
-  for(var k of unionKeys(x, y)) {
-    var xk = x.has(k);
-    var yk = y.has(k);
-    if(xk && !yk) a.set(k, x.get(k));
-    else if(!xk && yk) a.set(k, y.get(k));
-  }
-  return a;
+function symmetricDifference<T, U>(x: Entries<T, U>, y: Entries<T, U>): Map<T, U> {
+  return symmetricDifference$(new Map(x), y);
 }
 export default symmetricDifference;
