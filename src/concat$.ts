@@ -1,7 +1,7 @@
 import type {Entries} from './_types';
 
 /**
- * Combines entries from maps, preferring last.
+ * Appends entries from maps, preferring last.
  * @param x a maps (updated)
  * @param ys other maps
  * @returns x
