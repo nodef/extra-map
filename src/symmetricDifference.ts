@@ -6,8 +6,8 @@ import unionKeys from './unionKeys';
  * @param y another map
  */
 function symmetricDifference<T, U>(x: Map<T, U>, y: Map<T, U>): Map<T, U> {
-  var ks = unionKeys(x, y), a = new Map();
-  for(var k of ks) {
+  var a = new Map();
+  for(var k of unionKeys(x, y)) {
     var xk = x.has(k);
     var yk = y.has(k);
     if(xk && !yk) a.set(k, x.get(k));

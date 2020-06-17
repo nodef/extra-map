@@ -7,7 +7,7 @@ import type {combineFn, Entries} from './_types';
  * @param y another map
  * @param fn combine function (a, b)
  */
-function union<T, U>(x: Entries<T, U>, y: Map<T, U>, fn: combineFn<U>=null): Map<T, U> {
+function union<T, U>(x: Entries<T, U>, y: Entries<T, U>, fn: combineFn<U>=null): Map<T, U> {
   return union$(new Map(x), y, fn);
 }
 export default union;

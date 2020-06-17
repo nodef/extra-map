@@ -21,6 +21,7 @@ export {default as findAll} from './findAll';
 export {default as flat} from './flat';
 export {default as flatMap} from './flatMap';
 export {default as forEach} from './forEach';
+export {default as from$} from './from$';
 export {default as from} from './from';
 export {default as fromLists} from './fromLists';
 export {default as get} from './get';
