@@ -6,14 +6,14 @@ import type {combineFn} from './_types';
  * Gives entries present in both maps.
  * @param x a map (updated)
  * @param y another map
- * @param fn combine function (a, b)
+ * @param fc combine function (a, b)
  * @returns x
  */
-function intersection$<T, U>(x: Map<T, U>, y: Map<T, U>, fn: combineFn<U>=null): Map<T, U> {
-  var fn = fn||id, ks = [];
+function intersection$<T, U>(x: Map<T, U>, y: Map<T, U>, fc: combineFn<U>=null): Map<T, U> {
+  var fc = fc||id, ks = [];
   for(var [k, u] of [...x]) {
     if(!y.has(k)) ks.push(k);
-    x.set(k, fn(u, y.get(k)));
+    x.set(k, fc(u, y.get(k)));
   }
   return rejectAt$(x, ks);
 }
