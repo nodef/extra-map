@@ -63,7 +63,7 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 | [shift]               | Removes first entry.
 | [fromEntries]         | Creates object from entries.
 |                       | 
-| [concat]              | Combines entries from maps, preferring last.
+| [concat]              | Appends entries from maps, preferring last.
 | [flat]                | Flattens nested map to given depth.
 | [chunk]               | Breaks map into chunks of given size.
 | [filterAt]            | Gets map with given keys.
@@ -76,7 +76,7 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 | [partition]           | Segregates values by test result.
 | [cartesianProduct]    | Lists cartesian product of maps.
 | [some]                | Checks if any value satisfies a test.
-| [zip]                 | Combines entries from maps.
+| [zip]                 | Combines matching entries from maps.
 |                       | 
 | [union]               | Gives entries present in any map.
 | [intersection]        | Gives entries present in both maps.
