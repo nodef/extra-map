@@ -10,10 +10,8 @@ import type {combineFn, Entries} from './_types';
 function intersection<T, U>(x: Map<T, U>, y: Entries<T, U>, fn: combineFn<U>=null): Map<T, U> {
   var fn = fn||id;
   var a = new Map();
-  for(var [k, v] of y) {
-    if(!x.has(k)) a.set(k, v);
-    else a.set(k, fn(x.get(k), v));
-  }
+  for(var [k, v] of y)
+    if(!x.has(k)) a.set(k, fn(x.get(k), v));
   return a;
 }
 export default intersection;
