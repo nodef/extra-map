@@ -6,7 +6,7 @@ import type {mapFn} from './_types';
  * @param xs maps
  * @param fm map function (vs, i)
  */
-function* cartesianProduct<T, U, V=U>(xs: Map<T, U>[], fm: mapFn<number, Map<T, U>, Map<T, U>|V>=null): IterableIterator<Map<T, U>|V> {
+function* cartesianProduct<T, U, V=Map<T, U>>(xs: Map<T, U>[], fm: mapFn<number, Map<T, U>, Map<T, U>|V>=null): IterableIterator<Map<T, U>|V> {
   var fm = fm||id;
   var XS  = xs.length;
   var kss = xs.map(x => [...x.keys()]);

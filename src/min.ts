@@ -6,6 +6,7 @@ import type {compareFn, mapFn, Entries} from './_types';
  * @param x a map
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
+ * @returns [key, value]
  */
 function min<T, U, V=U>(x: Entries<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): [T, U] {
   return range(x, fc, fm)[0];
