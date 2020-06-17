@@ -72,6 +72,7 @@ export {default as submap} from './submap';
 export {default as submaps} from './submaps';
 export {default as swap$} from './swap$';
 export {default as swap} from './swap';
+export {default as symmetricDifference$} from './symmetricDifference$';
 export {default as symmetricDifference} from './symmetricDifference';
 export {default as tail} from './tail';
 export {default as take$} from './take$';
