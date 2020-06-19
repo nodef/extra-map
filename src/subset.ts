@@ -2,7 +2,7 @@ import filterAt from './filterAt';
 import {subsequence} from 'extra-array';
 
 /**
- * Picks an arbitrary set.
+ * Picks an arbitrary subset.
  * @param x a map
  * @param n number of entries (-1 => any)
  * @param r random seed 0->1

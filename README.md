@@ -34,7 +34,7 @@ map.searchAll(x, v => Math.abs(v) === 2);
 // [ 'b', 'd' ]              ^                   ^
 
 var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
-[...map.submaps(x)];
+[...map.subsets(x)];
 // [
 //   Map(0) {},
 //   Map(1) { 'a' => 1 },
@@ -87,7 +87,7 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 | [key]                 | Picks an arbitrary key.
 | [value]               | Picks an arbitrary value.
 | [entry]               | Picks an arbitrary entry.
-| [submap]              | Picks an arbitrary submap.
+| [subset]              | Picks an arbitrary subset.
 |                       | 
 | [isEmpty]             | Checks if map is empty.
 | [isEqual]             | Checks if two maps are equal.
@@ -145,5 +145,5 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 [find]: https://github.com/nodef/extra-map/wiki/find
 [search]: https://github.com/nodef/extra-map/wiki/search
 [scanWhile]: https://github.com/nodef/extra-map/wiki/scanWhile
-[submap]: https://github.com/nodef/extra-map/wiki/submap
-[:vhs:]: https://asciinema.org/a/338986
+[subset]: https://github.com/nodef/extra-map/wiki/subset
+[:vhs:]: https://asciinema.org/a/341106
