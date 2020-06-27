@@ -61,7 +61,7 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 | [head]                | Gets first entry.
 | [take]                | Keeps first n entries only.
 | [shift]               | Removes first entry.
-| [fromEntries]         | Creates object from entries.
+| [from]                | Creates map from entries.
 |                       | 
 | [concat]              | Appends entries from maps, preferring last.
 | [flat]                | Flattens nested map to given depth.
@@ -147,3 +147,4 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 [scanWhile]: https://github.com/nodef/extra-map/wiki/scanWhile
 [subset]: https://github.com/nodef/extra-map/wiki/subset
 [:vhs:]: https://asciinema.org/a/341106
+[from]: https://github.com/nodef/extra-map/wiki/from
