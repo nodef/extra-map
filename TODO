@@ -1,0 +1,6 @@
+HAS?
+- isKey
+- isValue
+- isEntry
+- isSubset
+- hasPath
