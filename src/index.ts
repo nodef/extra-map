@@ -24,6 +24,7 @@ export {default as forEach} from './forEach';
 export {default as from$} from './from$';
 export {default as from} from './from';
 export {default as fromLists} from './fromLists';
+export {default as fromValues} from './fromValues';
 export {default as get} from './get';
 export {default as getAll} from './getAll';
 export {default as head} from './head';

@@ -1,3 +1,4 @@
+export type arrayMapFn<T, U>  = (v: T, i: number, x: Iterable<T>) => U;
 export type tillFn            = (dones: boolean[]) => boolean;
 export type compareFn<T>      = (a: T, b: T) => number;
 export type calledFn<T, U>    = (v: U, k: T, x: Entries<T, U>) => void;
