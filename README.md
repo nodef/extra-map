@@ -118,7 +118,6 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 [head]: https://github.com/nodef/extra-map/wiki/head
 [take]: https://github.com/nodef/extra-map/wiki/take
 [shift]: https://github.com/nodef/extra-map/wiki/shift
-[fromEntries]: https://github.com/nodef/extra-map/wiki/fromEntries
 [concat]: https://github.com/nodef/extra-map/wiki/concat
 [flat]: https://github.com/nodef/extra-map/wiki/flat
 [chunk]: https://github.com/nodef/extra-map/wiki/chunk
