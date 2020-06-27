@@ -28,6 +28,7 @@ export {default as fromValues} from './fromValues';
 export {default as get} from './get';
 export {default as getAll} from './getAll';
 export {default as getPath} from './getPath';
+export {default as hasPath} from './hasPath';
 export {default as head} from './head';
 export {default as intersection$} from './intersection$';
 export {default as intersection} from './intersection';

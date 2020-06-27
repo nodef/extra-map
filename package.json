@@ -1,6 +1,6 @@
 {
   "name": "extra-map",
-  "version": "2.1.41",
+  "version": "2.1.42",
   "description": "A map is a collection of key-value pairs, with unique keys.",
   "main": "index.js",
   "module": "index.mjs",
@@ -42,6 +42,7 @@
     "get",
     "getAll",
     "getPath",
+    "hasPath",
     "head",
     "intersection",
     "intersectionKeys",
