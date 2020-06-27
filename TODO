@@ -4,3 +4,10 @@ HAS?
 - isEntry
 - isSubset
 - hasPath
+
+TERMINAL MAPS
+why we need mapFn if they are terminal?
+isnt this duplicate functionality?
+flatMap, mapCartesianProduct, mapZip
+- cartesianProduct
+- zip
