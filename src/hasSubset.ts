@@ -9,7 +9,7 @@ import type {compareFn, mapFn, Entries} from './_types';
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
  */
-function isSubset<T, U, V=U>(x: Map<T, U>, y: Entries<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
+function hasSubset<T, U, V=U>(x: Map<T, U>, y: Entries<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
   var fc = fc||cmp, fm = fm||id;
   for(var [k, v] of y) {
     if(!x.has(k)) return false;
@@ -19,4 +19,4 @@ function isSubset<T, U, V=U>(x: Map<T, U>, y: Entries<T, U>, fc: compareFn<U|V>=
   }
   return true;
 }
-export default isSubset;
+export default hasSubset;
