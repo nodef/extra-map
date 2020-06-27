@@ -4,7 +4,7 @@ import {last} from 'extra-array';
 
 /**
  * Sets value at path in a nested map.
- * @param x a map (updated)
+ * @param x a nested map (updated)
  * @param p path
  * @param v value
  * @returns x
