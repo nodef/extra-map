@@ -1,5 +1,10 @@
 A [map] is a collection of key-value pairs, with unique keys. [:running:] [:vhs:] [:package:] [:moon:] [:ledger:]
 
+In the future when you think of just giving up on life, remember
+that the letter was in your hands, the cab was at the gate, only
+if you had thought about it once more, your entire life would
+have been better. [(1)]
+
 Methods as separate packages:
 - `@extra-map/swap`: use [rollup] to bundle this es module.
 - `@extra-map/swap.min`: use in browser ([browserify], [uglify-js]).
@@ -8,12 +13,9 @@ Methods look like:
 - `swap()`: doesn't modify the map itself (pure).
 - `swap$()`: modifies the map itself (update).
 
-In the future when you think of just giving up on life, remember
-that the letter was in your hands, the cab was at the gate, only
-if you had thought about it once more, your entire life would
-have been better. [(1)]
-
 > Stability: Experimental.
+
+<br>
 
 ```javascript
 const map = require("extra-map");
@@ -47,58 +49,63 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 // ]
 ```
 
-### reference
-
-| Method                | Action
-|-----------------------|-------
-| [is]                  | Checks if value is map.
-| [get]                 | Gets value at key.
-| [set]                 | Sets value at key.
-| [remove]              | Deletes an entry.
-| [swap]                | Exchanges two values.
-| [size]                | Gets size of map.
-|                       |
-| [head]                | Gets first entry.
-| [take]                | Keeps first n entries only.
-| [shift]               | Removes first entry.
-| [from]                | Creates map from entries.
-|                       |
-| [concat]              | Appends entries from maps, preferring last.
-| [flat]                | Flattens nested map to given depth.
-| [chunk]               | Breaks map into chunks of given size.
-| [filterAt]            | Gets map with given keys.
-|                       |
-| [map]                 | Updates values based on map function.
-| [filter]              | Keeps entries which pass a test.
-| [reduce]              | Reduces values to a single value.
-| [range]               | Finds smallest and largest entries.
-| [count]               | Counts values which satisfy a test.
-| [partition]           | Segregates values by test result.
-| [cartesianProduct]    | Lists cartesian product of maps.
-| [some]                | Checks if any value satisfies a test.
-| [zip]                 | Combines matching entries from maps.
-|                       |
-| [union]               | Gives entries present in any map.
-| [intersection]        | Gives entries present in both maps.
-| [difference]          | Gives entries of map not present in another.
-| [symmetricDifference] | Gives entries not present in both maps.
-| [isDisjoint]          | Checks if maps have no common keys.
-|                       |
-| [key]                 | Picks an arbitrary key.
-| [value]               | Picks an arbitrary value.
-| [entry]               | Picks an arbitrary entry.
-| [subset]              | Picks an arbitrary subset.
-|                       |
-| [isEmpty]             | Checks if map is empty.
-| [isEqual]             | Checks if two maps are equal.
-| [compare]             | Compares two maps.
-| [find]                | Finds a value passing a test.
-| [search]              | Finds key of an entry passing a test.
-| [scanWhile]           | Finds key of first entry not passing a test.
-
+<br>
 <br>
 
-[![nodef](https://merferry.glitch.me/card/extra-map.svg)](https://nodef.github.io)
+
+## Index
+
+| Method                | Action                                       |
+| --------------------- | -------------------------------------------- |
+| [is]                  | Checks if value is map.                      |
+| [get]                 | Gets value at key.                           |
+| [set]                 | Sets value at key.                           |
+| [remove]              | Deletes an entry.                            |
+| [swap]                | Exchanges two values.                        |
+| [size]                | Gets size of map.                            |
+|                       |
+| [head]                | Gets first entry.                            |
+| [take]                | Keeps first n entries only.                  |
+| [shift]               | Removes first entry.                         |
+| [from]                | Creates map from entries.                    |
+|                       |
+| [concat]              | Appends entries from maps, preferring last.  |
+| [flat]                | Flattens nested map to given depth.          |
+| [chunk]               | Breaks map into chunks of given size.        |
+| [filterAt]            | Gets map with given keys.                    |
+|                       |
+| [map]                 | Updates values based on map function.        |
+| [filter]              | Keeps entries which pass a test.             |
+| [reduce]              | Reduces values to a single value.            |
+| [range]               | Finds smallest and largest entries.          |
+| [count]               | Counts values which satisfy a test.          |
+| [partition]           | Segregates values by test result.            |
+| [cartesianProduct]    | Lists cartesian product of maps.             |
+| [some]                | Checks if any value satisfies a test.        |
+| [zip]                 | Combines matching entries from maps.         |
+|                       |
+| [union]               | Gives entries present in any map.            |
+| [intersection]        | Gives entries present in both maps.          |
+| [difference]          | Gives entries of map not present in another. |
+| [symmetricDifference] | Gives entries not present in both maps.      |
+| [isDisjoint]          | Checks if maps have no common keys.          |
+|                       |
+| [key]                 | Picks an arbitrary key.                      |
+| [value]               | Picks an arbitrary value.                    |
+| [entry]               | Picks an arbitrary entry.                    |
+| [subset]              | Picks an arbitrary subset.                   |
+|                       |
+| [isEmpty]             | Checks if map is empty.                      |
+| [isEqual]             | Checks if two maps are equal.                |
+| [compare]             | Compares two maps.                           |
+| [find]                | Finds a value passing a test.                |
+| [search]              | Finds key of an entry passing a test.        |
+| [scanWhile]           | Finds key of first entry not passing a test. |
+
+<br>
+<br>
+
+[![](https://img.youtube.com/vi/9rlUPWpLWOw/maxresdefault.jpg)](https://www.youtube.com/watch?v=9rlUPWpLWOw)
 
 [(1)]: https://www.rottentomatoes.com/m/3_idiots/quotes/
 [map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
