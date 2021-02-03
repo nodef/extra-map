@@ -1,4 +1,12 @@
-A [map] is a collection of key-value pairs, with unique keys. [:running:] [:vhs:] [:package:] [:moon:] [:ledger:]
+A [map] is a collection of key-value pairs, with unique keys.<br>
+:package: [NPM](https://www.npmjs.com/package/extra-map),
+:smiley_cat: [GitHub](https://github.com/orgs/nodef/packages?repo_name=extra-map),
+:running: [RunKit](https://npm.runkit.com/extra-map),
+:vhs: [Asciinema](https://asciinema.org/a/341106),
+:moon: [Minified](https://www.npmjs.com/package/extra-map.min),
+:scroll: [Files](https://unpkg.com/extra-map/),
+:newspaper: [JSDoc](https://nodef.github.io/extra-map/),
+:blue_book: [Wiki](https://github.com/nodef/extra-map/wiki/).
 
 In the future when you think of just giving up on life, remember
 that the letter was in your hands, the cab was at the gate, only
@@ -112,10 +120,6 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 [browserify]: https://www.npmjs.com/package/browserify
 [rollup]: https://www.npmjs.com/package/rollup
 [uglify-js]: https://www.npmjs.com/package/uglify-js
-[:running:]: https://npm.runkit.com/extra-map
-[:package:]: https://www.npmjs.com/package/extra-map
-[:moon:]: https://www.npmjs.com/package/extra-map.min
-[:ledger:]: https://unpkg.com/extra-map/
 [is]: https://github.com/nodef/extra-map/wiki/is
 [get]: https://github.com/nodef/extra-map/wiki/get
 [set]: https://github.com/nodef/extra-map/wiki/set
@@ -152,5 +156,4 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 [search]: https://github.com/nodef/extra-map/wiki/search
 [scanWhile]: https://github.com/nodef/extra-map/wiki/scanWhile
 [subset]: https://github.com/nodef/extra-map/wiki/subset
-[:vhs:]: https://asciinema.org/a/341106
 [from]: https://github.com/nodef/extra-map/wiki/from
