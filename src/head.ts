@@ -1,5 +1,5 @@
-import {head as iterableHead} from 'extra-iterable';
-import type {Entries} from './_types';
+import {head as iterableHead} from "extra-iterable";
+import type {Entries} from "./_types";
 
 /**
  * Gets first entry.

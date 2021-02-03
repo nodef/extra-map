@@ -1,4 +1,4 @@
-import type {Entries, mapFn} from './_types';
+import type {Entries, mapFn} from "./_types";
 
 /**
  * Updates values based on map function.

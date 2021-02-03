@@ -1,7 +1,7 @@
-import id from './_id';
-import unionKeys from './unionKeys';
-import {some} from 'extra-iterable';
-import type {mapFn, tillFn} from './_types';
+import id from "./_id";
+import unionKeys from "./unionKeys";
+import {some} from "extra-iterable";
+import type {mapFn, tillFn} from "./_types";
 
 /**
  * Combines matching entries from maps.

@@ -1,4 +1,4 @@
-import {value as arrayValue} from 'extra-array';
+import {value as arrayValue} from "extra-array";
 
 /**
  * Picks an arbitrary value.

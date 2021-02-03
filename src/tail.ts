@@ -1,4 +1,4 @@
-import drop from './drop';
+import drop from "./drop";
 
 /**
  * Gets map without the first entry.

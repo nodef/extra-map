@@ -16,34 +16,34 @@ have been better. [(1)]
 > Stability: Experimental.
 
 ```javascript
-const map = require('extra-map');
-// import * as map from 'extra-map';
-// import * as map from 'https://unpkg.com/extra-map@2.1.0/index.mjs'; (deno)
+const map = require("extra-map");
+// import * as map from "extra-map";
+// import * as map from "https://unpkg.com/extra-map@2.1.0/index.mjs"; (deno)
 
-var x = new Map([['a', 1], ['b', 2], ['c', 3], ['d', 4]]);
-map.swap(x, 'a', 'b');
-// Map(4) { 'a' => 2, 'b' => 1, 'c' => 3, 'd' => 4 }
+var x = new Map([["a", 1], ["b", 2], ["c", 3], ["d", 4]]);
+map.swap(x, "a", "b");
+// Map(4) { "a" => 2, "b" => 1, "c" => 3, "d" => 4 }
 
-var x = new Map([['a', 1], ['b', 2], ['c', 3], ['d', 4]]);
-var y = new Map([['b', 20], ['c', 30], ['e', 50]]);
+var x = new Map([["a", 1], ["b", 2], ["c", 3], ["d", 4]]);
+var y = new Map([["b", 20], ["c", 30], ["e", 50]]);
 map.intersection(x, y);
-// Map(2) { 'b' => 2, 'c' => 3 }
+// Map(2) { "b" => 2, "c" => 3 }
 
-var x = new Map([['a', 1], ['b', 2], ['c', 3], ['d', -2]]);
+var x = new Map([["a", 1], ["b", 2], ["c", 3], ["d", -2]]);
 map.searchAll(x, v => Math.abs(v) === 2);
-// [ 'b', 'd' ]              ^                   ^
+// [ "b", "d" ]              ^                   ^
 
-var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
+var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 [...map.subsets(x)];
 // [
 //   Map(0) {},
-//   Map(1) { 'a' => 1 },
-//   Map(1) { 'b' => 2 },
-//   Map(2) { 'a' => 1, 'b' => 2 },
-//   Map(1) { 'c' => 3 },
-//   Map(2) { 'a' => 1, 'c' => 3 },
-//   Map(2) { 'b' => 2, 'c' => 3 },
-//   Map(3) { 'a' => 1, 'b' => 2, 'c' => 3 }
+//   Map(1) { "a" => 1 },
+//   Map(1) { "b" => 2 },
+//   Map(2) { "a" => 1, "b" => 2 },
+//   Map(1) { "c" => 3 },
+//   Map(2) { "a" => 1, "c" => 3 },
+//   Map(2) { "b" => 2, "c" => 3 },
+//   Map(3) { "a" => 1, "b" => 2, "c" => 3 }
 // ]
 ```
 
@@ -57,17 +57,17 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 | [remove]              | Deletes an entry.
 | [swap]                | Exchanges two values.
 | [size]                | Gets size of map.
-|                       | 
+|                       |
 | [head]                | Gets first entry.
 | [take]                | Keeps first n entries only.
 | [shift]               | Removes first entry.
 | [from]                | Creates map from entries.
-|                       | 
+|                       |
 | [concat]              | Appends entries from maps, preferring last.
 | [flat]                | Flattens nested map to given depth.
 | [chunk]               | Breaks map into chunks of given size.
 | [filterAt]            | Gets map with given keys.
-|                       | 
+|                       |
 | [map]                 | Updates values based on map function.
 | [filter]              | Keeps entries which pass a test.
 | [reduce]              | Reduces values to a single value.
@@ -77,18 +77,18 @@ var x = new Map([['a', 1], ['b', 2], ['c', 3]]);
 | [cartesianProduct]    | Lists cartesian product of maps.
 | [some]                | Checks if any value satisfies a test.
 | [zip]                 | Combines matching entries from maps.
-|                       | 
+|                       |
 | [union]               | Gives entries present in any map.
 | [intersection]        | Gives entries present in both maps.
 | [difference]          | Gives entries of map not present in another.
 | [symmetricDifference] | Gives entries not present in both maps.
 | [isDisjoint]          | Checks if maps have no common keys.
-|                       | 
+|                       |
 | [key]                 | Picks an arbitrary key.
 | [value]               | Picks an arbitrary value.
 | [entry]               | Picks an arbitrary entry.
 | [subset]              | Picks an arbitrary subset.
-|                       | 
+|                       |
 | [isEmpty]             | Checks if map is empty.
 | [isEqual]             | Checks if two maps are equal.
 | [compare]             | Compares two maps.

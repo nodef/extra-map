@@ -1,5 +1,5 @@
-import union$ from './union$';
-import type {combineFn, Entries} from './_types';
+import union$ from "./union$";
+import type {combineFn, Entries} from "./_types";
 
 /**
  * Gives entries present in any map.

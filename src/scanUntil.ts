@@ -1,5 +1,5 @@
-import search from './search';
-import type {testFn, Entries} from './_types';
+import search from "./search";
+import type {testFn, Entries} from "./_types";
 
 /**
  * Finds key of first entry passing a test.

@@ -1,4 +1,4 @@
-import type {Entries} from './_types';
+import type {Entries} from "./_types";
 
 /**
  * Joins entries together.
@@ -6,8 +6,8 @@ import type {Entries} from './_types';
  * @param sep separator (,)
  * @param asc associator (=)
  */
-function join<T, U>(x: Entries<T, U>, sep: string=',', asc: string='='): string {
-  var a = '';
+function join<T, U>(x: Entries<T, U>, sep: string=",", asc: string="="): string {
+  var a = "";
   for(var [k, v] of x)
     a += k+asc+v+sep;
   return a.slice(0, -sep.length);

@@ -1,5 +1,5 @@
-import id from './_id';
-import type {combineFn, Entries} from './_types';
+import id from "./_id";
+import type {combineFn, Entries} from "./_types";
 
 /**
  * Gives entries present in any map.

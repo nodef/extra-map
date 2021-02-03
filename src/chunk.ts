@@ -1,4 +1,4 @@
-import filterAt from './filterAt';
+import filterAt from "./filterAt";
 
 /**
  * Breaks map into chunks of given size.

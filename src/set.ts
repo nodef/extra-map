@@ -1,4 +1,4 @@
-import type {Entries} from './_types';
+import type {Entries} from "./_types";
 
 /**
  * Sets value at key.

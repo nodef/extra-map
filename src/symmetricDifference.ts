@@ -1,5 +1,5 @@
-import symmetricDifference$ from './symmetricDifference$';
-import type {Entries} from './_types';
+import symmetricDifference$ from "./symmetricDifference$";
+import type {Entries} from "./_types";
 
 /**
  * Gives entries not present in both maps.

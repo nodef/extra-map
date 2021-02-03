@@ -1,4 +1,4 @@
-import type {testFn, Entries} from './_types';
+import type {testFn, Entries} from "./_types";
 
 /**
  * Counts values which satisfy a test.

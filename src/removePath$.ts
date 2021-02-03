@@ -1,6 +1,6 @@
-import is from './is';
-import getPath from './getPath';
-import {last} from 'extra-array';
+import is from "./is";
+import getPath from "./getPath";
+import {last} from "extra-array";
 
 /**
  * Deletes value at path in a nested map.

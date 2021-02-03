@@ -1,6 +1,6 @@
-import id from './_id';
-import is from './is';
-import type {mapFn, testFn, Entries} from './_types';
+import id from "./_id";
+import is from "./is";
+import type {mapFn, testFn, Entries} from "./_types";
 
 function flatTo<T>(x: Entries<T, any>, n: number, fm: mapFn<T, any, any>, ft: testFn<T, any>, a: Map<T, any>): Map<T, any> {
   for(var [k, v] of x) {

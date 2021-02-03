@@ -1,5 +1,5 @@
-import searchValue from './searchValue';
-import type {compareFn, mapFn, Entries} from './_types';
+import searchValue from "./searchValue";
+import type {compareFn, mapFn, Entries} from "./_types";
 
 /**
  * Checks if map has a value.

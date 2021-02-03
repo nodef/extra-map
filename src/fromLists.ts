@@ -1,4 +1,4 @@
-import type {Lists} from './_types';
+import type {Lists} from "./_types";
 
 /**
  * Creates map from lists.

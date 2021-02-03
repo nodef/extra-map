@@ -1,4 +1,4 @@
-import type {testFn, Entries} from './_types';
+import type {testFn, Entries} from "./_types";
 
 /**
  * Finds key of first entry not passing a test.

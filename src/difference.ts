@@ -1,5 +1,5 @@
-import difference$ from './difference$';
-import type {Entries} from './_types';
+import difference$ from "./difference$";
+import type {Entries} from "./_types";
 
 /**
  * Gives entries of map not present in another.

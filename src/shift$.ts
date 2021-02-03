@@ -1,4 +1,4 @@
-import drop$ from './drop$';
+import drop$ from "./drop$";
 
 /**
  * Removes first entry.

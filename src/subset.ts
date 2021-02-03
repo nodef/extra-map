@@ -1,5 +1,5 @@
-import filterAt from './filterAt';
-import {subsequence} from 'extra-array';
+import filterAt from "./filterAt";
+import {subsequence} from "extra-array";
 
 /**
  * Picks an arbitrary subset.

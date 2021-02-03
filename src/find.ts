@@ -1,4 +1,4 @@
-import type {testFn, Entries} from './_types';
+import type {testFn, Entries} from "./_types";
 
 /**
  * Finds a value passing a test.

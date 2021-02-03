@@ -1,5 +1,5 @@
-import rejectAt$ from './rejectAt$';
-import type {Entries} from './_types';
+import rejectAt$ from "./rejectAt$";
+import type {Entries} from "./_types";
 
 /**
  * Gets map without given keys.

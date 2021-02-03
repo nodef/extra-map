@@ -1,4 +1,4 @@
-import type {testFn, Entries} from './_types';
+import type {testFn, Entries} from "./_types";
 
 /**
  * Keeps entries which pass a test.

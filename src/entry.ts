@@ -1,5 +1,5 @@
-import {value} from 'extra-array';
-import type {Entries} from './_types';
+import {value} from "extra-array";
+import type {Entries} from "./_types";
 
 /**
  * Picks an arbitrary entry.

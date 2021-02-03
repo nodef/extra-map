@@ -1,5 +1,5 @@
-import swap$ from './swap$';
-import type {Entries} from './_types';
+import swap$ from "./swap$";
+import type {Entries} from "./_types";
 
 /**
  * Exchanges two values.

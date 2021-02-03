@@ -1,5 +1,5 @@
-import id from './_id';
-import type {mapFn, Entries} from './_types';
+import id from "./_id";
+import type {mapFn, Entries} from "./_types";
 
 /**
  * Segregates values by similarity.

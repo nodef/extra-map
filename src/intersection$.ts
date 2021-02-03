@@ -1,6 +1,6 @@
-import id from './_id';
-import rejectAt$ from './rejectAt$';
-import type {combineFn} from './_types';
+import id from "./_id";
+import rejectAt$ from "./rejectAt$";
+import type {combineFn} from "./_types";
 
 /**
  * Gives entries present in both maps.

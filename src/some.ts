@@ -1,5 +1,5 @@
-import scanUntil from './scanUntil';
-import type {testFn, Entries} from './_types';
+import scanUntil from "./scanUntil";
+import type {testFn, Entries} from "./_types";
 
 /**
  * Checks if any value satisfies a test.

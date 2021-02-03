@@ -1,5 +1,5 @@
-import shift$ from './shift$';
-import type {Entries} from './_types';
+import shift$ from "./shift$";
+import type {Entries} from "./_types";
 
 /**
  * Removes first entry.

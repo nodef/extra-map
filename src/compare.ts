@@ -1,7 +1,7 @@
-import id from './_id';
-import cmp from './_cmp';
-import unionKeys from './unionKeys';
-import type {compareFn, mapFn} from './_types';
+import id from "./_id";
+import cmp from "./_cmp";
+import unionKeys from "./unionKeys";
+import type {compareFn, mapFn} from "./_types";
 
 /**
  * Compares two maps.

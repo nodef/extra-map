@@ -1,5 +1,5 @@
-import remove$ from './remove$';
-import type {Entries} from './_types';
+import remove$ from "./remove$";
+import type {Entries} from "./_types";
 
 /**
  * Deletes an entry.

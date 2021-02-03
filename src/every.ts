@@ -1,5 +1,5 @@
-import scanWhile from './scanWhile';
-import type {testFn, Entries} from './_types';
+import scanWhile from "./scanWhile";
+import type {testFn, Entries} from "./_types";
 
 /**
  * Checks if all values satisfy a test.

@@ -1,4 +1,4 @@
-import {Entries} from './_types';
+import {Entries} from "./_types";
 
 /**
  * Checks if maps have no common keys.

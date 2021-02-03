@@ -1,6 +1,6 @@
-import id from './_id';
-import {from$} from 'extra-array';
-import type {arrayMapFn} from './_types';
+import id from "./_id";
+import {from$} from "extra-array";
+import type {arrayMapFn} from "./_types";
 
 function fromValuesArray<T, U=T>(vs: T[], fm: arrayMapFn<T, T|U>) {
   var a = new Map(), ks = vs.map(fm);
