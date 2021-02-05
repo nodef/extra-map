@@ -8,18 +8,16 @@ A [map] is a collection of key-value pairs, with unique keys.<br>
 :newspaper: [JSDoc](https://nodef.github.io/extra-map/),
 :blue_book: [Wiki](https://github.com/nodef/extra-map/wiki/).
 
-In the future when you think of just giving up on life, remember
-that the letter was in your hands, the cab was at the gate, only
-if you had thought about it once more, your entire life would
-have been better. [(1)]
-
-Methods as separate packages:
-- `@extra-map/swap`: use [rollup] to bundle this es module.
-- `@extra-map/swap.min`: use in browser ([browserify], [uglify-js]).
+All functions except `from*()` take `Map` as 1st parameter. Some names
+are borrowed from Haskell, Python, Java, Processing.
 
 Methods look like:
 - `swap()`: doesn't modify the map itself (pure).
 - `swap$()`: modifies the map itself (update).
+
+Methods as separate packages:
+- `@extra-map/swap`: use [rollup] to bundle this es module.
+- `@extra-map/swap.min`: use in browser ([browserify], [uglify-js]).
 
 > Stability: Experimental.
 
@@ -115,7 +113,6 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 
 [![](https://img.youtube.com/vi/dMxIjGjMJz0/maxresdefault.jpg)](https://www.youtube.com/watch?v=dMxIjGjMJz0)
 
-[(1)]: https://www.rottentomatoes.com/m/3_idiots/quotes/
 [map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
 [browserify]: https://www.npmjs.com/package/browserify
 [rollup]: https://www.npmjs.com/package/rollup
