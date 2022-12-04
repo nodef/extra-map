@@ -1,24 +1,17 @@
-/**
- * Compares two values.
- * @param a a value
- * @param b another value
- * @returns a<b: -ve, a=b: 0, a>b: +ve
- */
- function cmp<T>(a: T, b: T): number {
-  return a<b? -1:(a>b? 1:0);
-}
-export default cmp;
-
-
-/**
- * Gives same value.
- * @param v a value
- * @returns v
- */
- function id<T>(v: T): T {
-  return v;
-}
-export default id;
+import {
+  IDENTITY,
+  COMPARE,
+} from "extra-function";
+import {
+  MapFunction as IterableMapFunction,
+} from "extra-iterable";
+import {
+  last         as arrayLast,
+  some         as arraySome,
+  subsequences as arraySubsequences,
+  randomValue  as arrayRandomValue,
+  randomSubsequence as arrayRandomSubsequence,
+} from "extra-array";
 
 
 
@@ -26,17 +19,85 @@ export default id;
 // TYPES
 // =====
 
-export type arrayMapFn<T, U>  = (v: T, i: number, x: Iterable<T>) => U;
-export type tillFn            = (dones: boolean[]) => boolean;
-export type compareFn<T>      = (a: T, b: T) => number;
-export type calledFn<T, U>    = (v: U, k: T, x: Entries<T, U>) => void;
-export type testFn<T, U>      = (v: U, k: T, x: Entries<T, U>) => boolean;
-export type mapFn<T, U, V>    = (v: U, k: T, x: Entries<T, U>) => V;
-export type reduceFn<T, U, V> = (acc: V, v: U, k: T, x: Entries<T, U>) => V;
-export type getFn<T>          = () => T;
-export type combineFn<T>      = (a: T, b: T) => T;
-export type Entries<T, U>     = Iterable<[T, U]>;
-export type Lists<T, U>       = [Iterable<T>, Iterable<U>];
+/** Entries is a list of key-value pairs, with unique keys. */
+export type Entries<K, V> = Iterable<[K, V]>;
+
+
+/** Lists is a pair of key list and value list, with unique keys. */
+export type Lists<K, V> = [Iterable<K>, Iterable<V>];
+
+
+/**
+ * Handle reading of a single value.
+ * @returns value
+ */
+export type ReadFunction<V> = () => V;
+
+
+/**
+ * Handle combining of two values.
+ * @param a a value
+ * @param b another value
+ * @returns combined value
+ */
+export type CombineFunction<V> = (a: V, b: V) => V;
+
+
+/**
+ * Handle comparison of two values.
+ * @param a a value
+ * @param b another value
+ * @returns a<b: -ve, a=b: 0, a>b: +ve
+ */
+export type CompareFunction<V> = (a: V, b: V) => number;
+
+
+/**
+ * Handle processing of values in a map.
+ * @param v value in map
+ * @param k key of value in map
+ * @param x map containing the value
+ */
+export type ProcessFunction<K, V> = (v: V, k: K, x: Map<K, V>) => void;
+
+
+/**
+ * Handle selection of values in a map.
+ * @param v value in map
+ * @param k key of value in map
+ * @param x map containing the value
+ * @returns selected?
+ */
+export type TestFunction<K, V> = (v: V, k: K, x: Map<K, V>) => boolean;
+
+
+/**
+ * Handle transformation of a value to another.
+ * @param v value in map
+ * @param k key of value in map
+ * @param x map containing the value
+ * @returns transformed value
+ */
+export type MapFunction<K, V, W> = (v: V, k: K, x: Map<K, V>) => W;
+
+
+/**
+ * Handle reduction of multiple values into a single value.
+ * @param acc accumulator (temporary result)
+ * @param v value in map
+ * @param k key of value in map
+ * @param x map containing the value
+ * @returns reduced value
+ */
+export type ReduceFunction<K, V, W> = (acc: W, v: V, k: K, x: Map<K, V>) => W;
+
+
+/**
+ * Handle ending of a combined map.
+ * @param dones iᵗʰ map done?
+ * @returns combined map done?
+ */
+export type EndFunction = (dones: boolean[]) => boolean;
 
 
 
@@ -48,45 +109,43 @@ export type Lists<T, U>       = [Iterable<T>, Iterable<U>];
 // -----
 
 /**
- * Checks if value is map.
+ * Check if value is a map.
  * @param v value
+ * @returns v is a map?
  */
- function is(v: any): v is Map<any, any> {
+export function is(v: any): v is Map<any, any> {
   return v instanceof Map;
 }
-export default is;
 
 
 /**
- * Lists all keys.
+ * List all keys.
  * @param x a map
+ * @returns k₀, k₁, ... | [kᵢ, vᵢ] ∈ x
  */
- function* keys<T, U>(x: Map<T, U>): IterableIterator<T> {
-  yield* x.keys();
+export function keys<K, V>(x: Map<K, V>): IterableIterator<K> {
+  return x.keys();
 }
-export default keys;
 
 
 /**
- * Lists all values.
+ * List all values.
  * @param x a map
+ * @returns v₀, v₁, ... | [kᵢ, vᵢ] ∈ x
  */
- function* values<T, U>(x: Map<T, U>): IterableIterator<U> {
-  yield* x.values();
+export function values<K, V>(x: Map<K, V>): IterableIterator<V> {
+  return x.values();
 }
-export default values;
 
-
-import type {Entries} from "./_types";
 
 /**
- * Lists all key-value pairs.
+ * List all key-value pairs.
  * @param x a map
+ * @returns [k₀, v₀], [k₁, v₁], ... | [kᵢ, vᵢ] ∈ x
  */
-function* entries<T, U>(x: Entries<T, U>): IterableIterator<[T, U]> {
-  yield* x;
+export function entries<K, V>(x: Map<K, V>): IterableIterator<[K, V]> {
+  return x.entries();
 }
-export default entries;
 
 
 
@@ -94,66 +153,71 @@ export default entries;
 // GENERATE
 // --------
 
-import type {Entries} from "./_types";
+/**
+ * Convert entries to map.
+ * @param x entries
+ * @returns x as map
+ */
+export function from<K, V>(x: Entries<K, V>): Map<K, V> {
+  return new Map(x);
+}
+export {from as fromEntries};
+
 
 /**
- * Creates map from entries.
- * @param es entries
+ * Convert entries to map.
+ * @param x entries (updateable is map!)
+ * @returns x as map
  */
-function from<T, U>(es: Entries<T, U>): Map<T, U> {
-  return new Map(es);
+export function from$<K, V>(x: Entries<K, V>): Map<K, V> {
+  return x instanceof Map? x : new Map(x);
 }
-export default from;
+export {from$ as fromEntries$};
 
-
-import type {Entries} from "./_types";
 
 /**
- * Creates map from entries.
- * @param es entries (updatable if map)
+ * Convert lists to map.
+ * @param x lists, i.e. [keys, values]
+ * @returns x as map
  */
-function from$<T, U>(es: Entries<T, U>): Map<T, U> {
-  return es instanceof Map? es : new Map(es);
-}
-export default from$;
-
-
-import type {Lists} from "./_types";
-
-/**
- * Creates map from lists.
- * @param ls lists, i.e. [keys, values]
- */
-function fromLists<T, U>(ls: Lists<T, U>): Map<T, U> {
-  var [ks, vs] = ls, vi = vs[Symbol.iterator]();
-  var a = new Map();
-  for(var k of ks)
-    a.set(k, vi.next().value);
-  return a;
-}
-export default fromLists;
-
-
-import id from "./_id";
-import {from$} from "extra-array";
-import type {arrayMapFn} from "./_types";
-
-function fromValuesArray<T, U=T>(vs: T[], fm: arrayMapFn<T, T|U>) {
-  var a = new Map(), ks = vs.map(fm);
-  for(var i=0, I=vs.length; i<I; i++)
-    a.set(ks[i], vs[i]);
+export function fromLists<K, V>(x: Lists<K, V>): Map<K, V> {
+  var [ks, vs] = x;
+  var iv = vs[Symbol.iterator]();
+  var a  = new Map<K, V>();
+  for (var k of ks)
+    a.set(k, iv.next().value);
   return a;
 }
 
+
 /**
- * Creates a map from values.
- * @param vs values
- * @param fm map function (v, i, x)
+ * Create a map from keys.
+ * @param x keys
+ * @param fm map function for values (v, i, x)
+ * @returns x as map
  */
-function fromValues<T, U=T>(vs: Iterable<T>, fm: arrayMapFn<T, T|U>=null) {
-  return fromValuesArray(from$(vs), fm||id);
+export function fromKeys<K, V=K>(x: Iterable<K>, fm: IterableMapFunction<K, K|V> | null=null): Map<K, K|V> {
+  var fm = fm || IDENTITY;
+  var a  = new Map<K, K|V>(), i = -1;
+  for (var k of x)
+    a.set(k, fm(k, ++i, x));
+  return a;
 }
-export default fromValues;
+
+
+/**
+ * Create a map from values.
+ * @param x values
+ * @param fm map function for keys (v, i, x)
+ * @returns x as map
+ */
+export function fromValues<V, K=V>(x: Iterable<V>, fm: IterableMapFunction<V, V|K> | null=null): Map<V|K, V> {
+  var fm = fm || IDENTITY;
+  var a  = new Map<V|K, V>(), i = -1;
+  for (var v of x)
+    a.set(fm(v, ++i, x), v);
+  return a;
+}
 
 
 
@@ -161,49 +225,41 @@ export default fromValues;
 // COMPARE
 // -------
 
-import id from "./_id";
-import cmp from "./_cmp";
-import unionKeys from "./unionKeys";
-import type {compareFn, mapFn} from "./_types";
-
 /**
- * Compares two maps.
+ * Compare two maps.
  * @param x a map
  * @param y another map
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
  * @returns x=y: 0, otherwise: -ve/+ve
  */
-function compare<T, U, V=U>(x: Map<T, U>, y: Map<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): number {
-  var fc = fc||cmp, fm = fm||id;
+export function compare<K, V, W=V>(x: Map<K, V>, y: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): number {
+  var fc = fc || COMPARE;
+  var fm = fm || IDENTITY;
   var ks = unionKeys(x, y);
-  for(var k of ks) {
-    if(!x.has(k)) return -1;
-    if(!y.has(k)) return 1;
-    var u = fm(x.get(k), k, x);
-    var v = fm(y.get(k), k, y);
-    var c = fc(u, v);
-    if(c!==0) return c;
+  for (var k of ks) {
+    if (!x.has(k)) return -1;
+    if (!y.has(k)) return  1;
+    var vx = fm(x.get(k), k, x);
+    var vy = fm(y.get(k), k, y);
+    var c  = fc(vx, vy);
+    if (c!==0) return c;
   }
   return 0;
 }
-export default compare;
 
-
-import compare from "./compare";
-import type {compareFn, mapFn} from "./_types";
 
 /**
- * Checks if two maps are equal.
+ * Check if two maps are equal.
  * @param x a map
  * @param y another map
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
+ * @returns x = y?
  */
-function isEqual<T, U, V=U>(x: Map<T, U>, y: Map<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
+export function isEqual<K, V, W=V>(x: Map<K, V>, y: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): boolean {
   return x.size===y.size && compare(x, y, fc, fm)===0;
 }
-export default isEqual;
 
 
 
@@ -212,23 +268,24 @@ export default isEqual;
 // ----
 
 /**
- * Gets size of map.
+ * Find the size of a map.
  * @param x a map
+ * @returns |x|
  */
- function size<T, U>(x: Map<T, U>): number {
+export function size<K, V>(x: Map<K, V>): number {
   return x.size;
 }
-export default size;
+export {size as length};
 
 
 /**
- * Checks if map is empty.
+ * Check if a map is empty.
  * @param x a map
+ * @returns |x| = 0?
  */
- function isEmpty<T, U>(x: Map<T, U>): boolean {
+export function isEmpty<K, V>(x: Map<K, V>): boolean {
   return x.size===0;
 }
-export default isEmpty;
 
 
 
@@ -237,89 +294,78 @@ export default isEmpty;
 // -------
 
 /**
- * Gets value at key.
+ * Get value at key.
  * @param x a map
  * @param k key
+ * @returns x[k]
  */
- function get<T, U>(x: Map<T, U>, k: T): U {
+export function get<K, V>(x: Map<K, V>, k: K): V {
   return x.get(k);
 }
-export default get;
 
 
 /**
- * Gets values at keys.
+ * Get values at keys.
  * @param x a map
  * @param ks keys
+ * @returns [x[k₀], x[k₁], ...] | [k₀, k₁, ...] = ks
  */
- function getAll<T, U>(x: Map<T, U>, ks: T[]): U[] {
+export function getAll<K, V>(x: Map<K, V>, ks: K[]): V[] {
   return ks.map(k => x.get(k));
 }
-export default getAll;
 
-
-import is from "./is";
 
 /**
- * Gets value at path in a nested map.
+ * Get value at path in a nested map.
  * @param x a nested map
  * @param p path
+ * @returns x[k₀][k₁][...] | [k₀, k₁, ...] = p
  */
-function getPath<T>(x: Map<T, any>, p: T[]): any {
-  for(var k of p)
+export function getPath<K>(x: Map<K, any>, p: K[]): any {
+  for (var k of p)
     x = is(x)? x.get(k) : undefined;
   return x;
 }
-export default getPath;
 
-
-import is from "./is";
 
 /**
- * Checks if nested map has a path.
+ * Check if nested map has a path.
  * @param x a nested map
  * @param p path
+ * @returns x[k₀][k₁][...] exists? | [k₀, k₁, ...] = p
  */
-function hasPath<T>(x: Map<T, any>, p: T[]): boolean {
-  for(var k of p) {
-    if(!is(x)) return false;
+export function hasPath<K>(x: Map<K, any>, p: K[]): boolean {
+  for (var k of p) {
+    if (!is(x)) return false;
     x = x.get(k);
   }
   return true;
 }
-export default hasPath;
 
-
-import type {Entries} from "./_types";
 
 /**
- * Sets value at key.
+ * Set value at key.
  * @param x a map
  * @param k key
  * @param v value
+ * @returns x' | x' = x; x'[k] = v
  */
-function set<T, U>(x: Entries<T, U>, k: T, v: U): Map<T, U> {
+export function set<K, V>(x: Entries<K, V>, k: K, v: V): Map<K, V> {
   return new Map(x).set(k, v);
 }
-export default set;
 
 
 /**
- * Sets value at key.
+ * Set value at key.
  * @param x a map (updated)
  * @param k key
  * @param v value
- * @returns x
+ * @returns x | x[k] = v
  */
- function set$<T, U>(x: Map<T, U>, k: T, v: U): Map<T, U> {
+export function set$<K, V>(x: Map<K, V>, k: K, v: V): Map<K, V> {
   return x.set(k, v);
 }
-export default set$;
 
-
-import is from "./is";
-import getPath from "./getPath";
-import {last} from "extra-array";
 
 /**
  * Sets value at path in a nested map.
@@ -328,88 +374,74 @@ import {last} from "extra-array";
  * @param v value
  * @returns x
  */
-function setPath$<T>(x: Map<T, any>, p: T[], v: any): Map<T, any> {
+export function setPath$<K>(x: Map<K, any>, p: K[], v: any): Map<K, any> {
   var y = getPath(x, p.slice(0, -1));
-  if(is(y)) y.set(last(p), v);
+  if (is(y)) y.set(arrayLast(p), v);
   return x;
 }
-export default setPath$;
 
-
-import swap$ from "./swap$";
-import type {Entries} from "./_types";
 
 /**
- * Exchanges two values.
+ * Exchange two values.
  * @param x a map
  * @param k a key
  * @param l another key
+ * @returns x' | x' = x; x'[k] = x[l]; x'[l] = x[k]
  */
-function swap<T, U>(x: Entries<T, U>, k: T, l: T): Map<T, U> {
+export function swap<K, V>(x: Entries<K, V>, k: K, l: K): Map<K, V> {
   return swap$(new Map(x), k, l);
 }
-export default swap;
 
 
 /**
- * Exchanges two values.
+ * Exchange two values.
  * @param x a map (updated)
  * @param k a key
  * @param l another key
- * @returns x
+ * @returns x | x[i] ↔ x[j]
  */
- function swap$<T, U>(x: Map<T, U>, k: T, l: T): Map<T, U> {
-  var t = x.get(k);
+export function swap$<K, V>(x: Map<K, V>, k: K, l: K): Map<K, V> {
+  var t  = x.get(k);
   x.set(k, x.get(l));
   x.set(l, t);
   return x;
 }
-export default swap$;
 
-
-import remove$ from "./remove$";
-import type {Entries} from "./_types";
 
 /**
- * Deletes an entry.
+ * Remove value at key.
  * @param x a map
  * @param k key
+ * @returns x \\: [k]
  */
-function remove<T, U>(x: Entries<T, U>, k: T): Map<T, U> {
+export function remove<K, V>(x: Entries<K, V>, k: K): Map<K, V> {
   return remove$(new Map(x), k);
 }
-export default remove;
 
 
 /**
- * Deletes an entry.
+ * Remove value at key.
  * @param x a map (updated)
  * @param k key
- * @returns x
+ * @returns x = x \\: [k]
  */
- function remove$<T, U>(x: Map<T, U>, k: T): Map<T, U> {
+export function remove$<K, V>(x: Map<K, V>, k: K): Map<K, V> {
   x.delete(k);
   return x;
 }
-export default remove$;
 
-
-import is from "./is";
-import getPath from "./getPath";
-import {last} from "extra-array";
 
 /**
- * Deletes value at path in a nested map.
+ * Remove value at path in a nested map.
  * @param x a nested map (updated)
  * @param p path
- * @returns x
+ * @returns x = x \\: [i₀][i₁][...] | [i₀, i₁, ...] = p
  */
-function removePath$<T>(x: Map<T, any>, p: T[]): Map<T, any> {
+export function removePath$<K>(x: Map<K, any>, p: K[]): Map<K, any> {
   var y = getPath(x, p.slice(0, -1));
-  if(is(y)) y.delete(last(p));
+  if (is(y)) y.delete(arrayLast(p));
   return x;
 }
-export default removePath$;
 
 
 
@@ -417,101 +449,120 @@ export default removePath$;
 // PROPERTY
 // --------
 
-import type {testFn, Entries} from "./_types";
-
 /**
- * Counts values which satisfy a test.
+ * Count values which satisfy a test.
  * @param x a map
- * @param fn test function (v, k, x)
+ * @param ft test function (v, k, x)
+ * @returns Σtᵢ | tᵢ = 1 if ft(vᵢ) else 0; [kᵢ, vᵢ] ∈ x
  */
-function count<T, U>(x: Entries<T, U>, fn: testFn<T, U>): number {
+export function count<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): number {
   var a = 0;
-  for(var [k, v] of x)
-    if(fn(v, k, x)) a++;
+  for (var [k, v] of x)
+    if (ft(v, k, x)) ++a;
   return a;
 }
-export default count;
 
-
-import id from "./_id";
-import type {mapFn, Entries} from "./_types";
 
 /**
- * Counts occurrences of values.
+ * Count occurrences of values.
  * @param x a map
  * @param fm map function (v, k, x)
- * @returns Map {value => count}
+ * @returns Map \{value ⇒ count\}
  */
-function countAs<T, U, V=U>(x: Entries<T, U>, fm: mapFn<T, U, U|V>): Map<U|V, number> {
-  var fm = fm||id;
-  var a = new Map();
-  for(var [k, v] of x) {
-    var v1 = fm(v, k, x);
-    var n = a.get(v1)||0;
-    a.set(v1, n+1);
+export function countAs<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W>): Map<V|W, number> {
+  var fm = fm || IDENTITY;
+  var a  = new Map();
+  for (var [k, v] of x) {
+    var w = fm(v, k, x);
+    var n = a.get(w) || 0;
+    a.set(w, n+1);
   }
   return a;
 }
-export default countAs;
 
-
-import range from "./range";
-import type {compareFn, mapFn, Entries} from "./_types";
 
 /**
- * Finds smallest entry.
+ * Find smallest value.
  * @param x a map
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
- * @returns [key, value]
+ * @returns v | v ≤ vᵢ; [kᵢ, vᵢ] ∈ x
  */
-function min<T, U, V=U>(x: Entries<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): [T, U] {
-  return range(x, fc, fm)[0];
+export function min<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): V {
+  return rangeEntries(x, fc, fm)[0][1];
 }
-export default min;
 
-
-import range from "./range";
-import type {compareFn, mapFn, Entries} from "./_types";
 
 /**
- * Finds largest entry.
+ * Find smallest entry.
  * @param x a map
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
- * @returns [key, value]
+ * @returns [min_key, min_value]
  */
-function max<T, U, V=U>(x: Entries<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): [T, U] {
-  return range(x, fc, fm)[1];
+export function minEntry<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): [K, V] {
+  return rangeEntries(x, fc, fm)[0];
 }
-export default max;
 
-
-import id from "./_id";
-import cmp from "./_cmp";
-import type {compareFn, mapFn, Entries} from "./_types";
 
 /**
- * Finds smallest and largest entries.
+ * Find largest value.
  * @param x a map
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
- * @returns [smallest, largest]
+ * @returns v | v ≥ vᵢ; [kᵢ, vᵢ] ∈ x
  */
-function range<T, U, V=U>(x: Entries<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): [[T, U], [T, U]] {
-  var fc = fc||cmp, fm = fm||id;
-  var mk: T, mu: U, mv: U|V;
-  var nk: T, nu: U, nv: U|V;
+export function max<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): V {
+  return rangeEntries(x, fc, fm)[1][1];
+}
+
+
+/**
+ * Find largest entry.
+ * @param x a map
+ * @param fc compare function (a, b)
+ * @param fm map function (v, k, x)
+ * @returns [max_key, max_value]
+ */
+export function maxEntry<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): [K, V] {
+  return rangeEntries(x, fc, fm)[1];
+}
+
+
+/**
+ * Find smallest and largest values.
+ * @param x a map
+ * @param fc compare function (a, b)
+ * @param fm map function (v, k, x)
+ * @returns [min_value, max_value]
+ */
+export function range<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): [V, V] {
+  var [a, b] = rangeEntries(x, fc, fm);
+  return [a[1], b[1]];
+}
+
+
+/**
+ * Find smallest and largest entries.
+ * @param x a map
+ * @param fc compare function (a, b)
+ * @param fm map function (v, k, x)
+ * @returns [min_entry, max_entry]
+ */
+export function rangeEntries<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): [[K, V], [K, V]] {
+  var fc = fc || COMPARE;
+  var fm = fm || IDENTITY;
+  var mk: K, mu: V, mv: V|W;
+  var nk: K, nu: V, nv: V|W;
   var i = 0;
-  for(var [k, u] of x) {
+  for (var [k, u] of x) {
     var v = fm(u, k, x);
-    if(i===0 || fc(v, mv)<0) { mk = k; mu = u; mv = v; }
-    if(i===0 || fc(v, nv)>0) { nk = k; nu = u; nv = v; }
-    i++;
+    if (i===0 || fc(v, mv)<0) { mk = k; mu = u; mv = v; }
+    if (i===0 || fc(v, nv)>0) { nk = k; nu = u; nv = v; }
+    ++i;
   }
   return [[mk, mu], [nk, nu]];
 }
-export default range;
 
 
 
@@ -520,91 +571,88 @@ export default range;
 // ----
 
 import {head as iterableHead} from "extra-iterable";
-import type {Entries} from "./_types";
 
 /**
- * Gets first entry.
+ * Get first entry from map (default order).
  * @param x a map
  * @param ed default entry
+ * @returns [k₀, v₀] if x ≠ Φ else ed | [k₀, v₀] ∈ x
  */
-function head<T, U>(x: Entries<T, U>, ed: [T, U]=[] as any): [T, U] {
-  return iterableHead(x, ed);
+export function head<K, V>(x: Entries<K, V>, ed: [K, V]=[] as any): [K, V] {
+  for (var e of x)
+    return e;
+  return ed;
 }
-export default head;
 
-
-import drop from "./drop";
 
 /**
- * Gets map without the first entry.
+ * Get a map without its first entry (default order).
  * @param x a map
+ * @returns x \\ \{[k₀, v₀]\} if x ≠ Φ else x | [k₀, v₀] ∈ x
  */
-function tail<T, U>(x: Map<T, U>): Map<T, U> {
+export function tail<K, V>(x: Map<K, V>): Map<K, V> {
   return drop(x, 1);
 }
-export default tail;
 
 
 /**
- * Keeps first n entries only.
+ * Keep first n entries only (default order).
  * @param x a map
- * @param n number of entries (1)
+ * @param n number of entries [1]
+ * @returns \{[k₀, v₀], [k₁, v₁], ...\} | [kᵢ, vᵢ] ∈ x and |\{[k₀, v₀], [k₁, v₁], ...\}| ≤ n
  */
- function take<T, U>(x: Map<T, U>, n: number=1): Map<T, U> {
-  var i = 0, a = new Map();
-  for(var [k, v] of x) {
-    if(i++>=n) break;
+export function take<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
+  var a = new Map(), i = -1;
+  for (var [k, v] of x) {
+    if (++i>=n) break;
     a.set(k, v);
   }
   return a;
 }
-export default take;
 
 
 /**
- * Keeps first n entries only.
+ * Keep first n entries only (default order).
  * @param x a map (updated)
- * @param n number of entries (1)
- * @returns x
+ * @param n number of entries [1]
+ * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | [kᵢ, vᵢ] ∈ x and |\{[k₀, v₀], [k₁, v₁], ...\}| ≤ n
  */
- function take$<T, U>(x: Map<T, U>, n: number=1): Map<T, U> {
-  var i = 0;
-  for(var k of x.keys())
-    if(i++>=n) x.delete(k);
+export function take$<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
+  var i = -1;
+  for (var k of x.keys())
+    if (++i>=n) x.delete(k);
   return x;
 }
-export default take$;
 
 
 /**
- * Removes first n entries.
+ * Remove first n entries (default order).
  * @param x a map
- * @param n number of entries (1)
+ * @param n number of entries [1]
+ * @returns \{[kₙ, vₙ], [kₙ₊₁, vₙ₊₁], ...\} | [kᵢ, vᵢ] ∈ x and |\{[kₙ, vₙ], [kₙ₊₁, vₙ₊₁], ...\}| ≤ max(|x| - n, 0)
  */
- function drop<T, U>(x: Map<T, U>, n: number=1): Map<T, U> {
-  var i = 0, a = new Map();
-  for(var [k, v] of x)
-    if(i++>=n) a.set(k, v);
+export function drop<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
+  var a = new Map(), i = -1;
+  for (var [k, v] of x)
+    if (++i>=n) a.set(k, v);
   return a;
 }
-export default drop;
 
 
 /**
- * Removes first n entries.
+ * Remove first n entries (default order).
  * @param x a map (updated)
- * @param n number of entries (1)
- * @returns x
+ * @param n number of entries [1]
+ * @returns x = \{[kₙ, vₙ], [kₙ₊₁, vₙ₊₁], ...\} | [kᵢ, vᵢ] ∈ x and |\{[kₙ, vₙ], [kₙ₊₁, vₙ₊₁], ...\}| ≤ max(|x| - n, 0)
  */
- function drop$<T, U>(x: Map<T, U>, n: number=1): Map<T, U> {
-  var i = 0;
-  for(var k of x.keys()) {
-    if(i++>=n) break;
+export function drop$<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
+  var i = -1;
+  for (var k of x.keys()) {
+    if (++i>=n) break;
     x.delete(k);
   }
   return x;
 }
-export default drop$;
 
 
 
@@ -612,75 +660,55 @@ export default drop$;
 // ARRANGEMENTS
 // ------------
 
-import filterAt from "./filterAt";
-import {subsequences} from "extra-array";
-
 /**
- * Lists all possible subsets.
+ * List all possible subsets.
  * @param x a map
- * @param n number of entries (-1 => any)
+ * @param n number of entries [-1 ⇒ any]
+ * @returns entries selected by bit from 0..2^|x| if n<0; only of length n otherwise
  */
-function* subsets<T, U>(x: Map<T, U>, n: number=-1): IterableIterator<Map<T, U>> {
-  for(var ks of subsequences([...x.keys()], n))
+export function* subsets<K, V>(x: Map<K, V>, n: number=-1): IterableIterator<Map<K, V>> {
+  for (var ks of arraySubsequences([...x.keys()], n))
     yield filterAt(x, ks);
 }
-export default subsets;
 
-
-import {value as arrayValue} from "extra-array";
 
 /**
- * Picks an arbitrary value.
+ * Pick an arbitrary key.
  * @param x a map
- * @param r random seed 0->1
+ * @param fr random number generator ([0, 1))
+ * @returns kᵢ | [kᵢ, vᵢ] ∈ x
  */
-function value<T, U>(x: Map<T, U>, r: number=Math.random()): U {
-  return arrayValue([...x.values()], r);
+export function randomKey<K, V>(x: Map<K, V>, fr: ReadFunction<number>=Math.random): K {
+  return arrayRandomValue([...x.keys()], fr);
 }
-export default value;
+export {randomKey as key};
 
-
-import {value} from "extra-array";
 
 /**
- * Picks an arbitrary key.
+ * Pick an arbitrary entry.
  * @param x a map
- * @param r random seed 0->1
+ * @param x a map
+ * @param fr random number generator ([0, 1))
+ * @returns [kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x
  */
-function key<T, U>(x: Map<T, U>, r: number=Math.random()): T {
-  return value([...x.keys()], r);
+export function randomEntry<K, V>(x: Entries<K, V>, fr: ReadFunction<number>=Math.random): [K, V] {
+  return arrayRandomValue([...x], fr);
 }
-export default key;
+export {randomEntry as entry};
 
-
-import {value} from "extra-array";
-import type {Entries} from "./_types";
 
 /**
- * Picks an arbitrary entry.
+ * Pick an arbitrary subset.
  * @param x a map
- * @param r random seed 0->1
+ * @param n number of entries [-1 ⇒ any]
+ * @param fr random number generator ([0, 1))
+ * @returns \{[kᵢ, vᵢ], [kⱼ, vⱼ], ...\} | [kᵢ, vᵢ], [kⱼ, vⱼ], ... ∈ x; |\{[kᵢ, vᵢ], [kⱼ, vⱼ], ...\}| = |x| if n<0 else n
  */
-function entry<T, U>(x: Entries<T, U>, r: number=Math.random()): [T, U] {
-  return value([...x], r);
-}
-export default entry;
-
-
-import filterAt from "./filterAt";
-import {subsequence} from "extra-array";
-
-/**
- * Picks an arbitrary subset.
- * @param x a map
- * @param n number of entries (-1 => any)
- * @param r random seed 0->1
- */
-function subset<T, U>(x: Map<T, U>, n: number=-1, r: number=Math.random()): Map<T, U> {
-  var ks = subsequence([...x.keys()], n, r);
+export function randomSubset<K, V>(x: Map<K, V>, n: number=-1, fr: ReadFunction<number>=Math.random): Map<K, V> {
+  var ks = arrayRandomSubsequence([...x.keys()], n, fr);
   return filterAt(x, ks);
 }
-export default subset;
+export {randomSubset as subset};
 
 
 
@@ -689,205 +717,156 @@ export default subset;
 // ----
 
 /**
- * Checks if map has a key.
+ * Check if map has a key.
  * @param x a map
- * @param k key?
+ * @param k search key
+ * @returns [k, v] ∈ x?
  */
- function has<T, U>(x: Map<T, U>, k: T): boolean {
+export function has<K, V>(x: Map<K, V>, k: K): boolean {
   return x.has(k);
 }
-export default has;
+export {has as hasKey};
 
-
-import searchValue from "./searchValue";
-import type {compareFn, mapFn, Entries} from "./_types";
 
 /**
- * Checks if map has a value.
+ * Check if map has a value.
  * @param x a map
  * @param v value?
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
+ * @returns [*, v] ∈ x?
  */
-function hasValue<T, U, V=U>(x: Entries<T, U>, v: U, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
+export function hasValue<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): boolean {
   return searchValue(x, v, fc, fm)!==undefined;
 }
-export default hasValue;
 
-
-import id from "./_id";
-import cmp from "./_cmp";
-import type {compareFn, mapFn} from "./_types";
 
 /**
- * Checks if map has an entry.
+ * Check if map has an entry.
  * @param x a map
- * @param e entry?
+ * @param e search entry ([k, v])
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
+ * @returns [k, v] ∈ x? | [k, v] = e
  */
-function hasEntry<T, U, V=U>(x: Map<T, U>, e: [T, U], fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
-  var fc = fc||cmp, fm = fm||id, [k, v] = e;
+export function hasEntry<K, V, W=V>(x: Map<K, V>, e: [K, V], fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): boolean {
+  var fc = fc || COMPARE;
+  var fm = fm || IDENTITY;
+  var [k, v] = e;
   return x.has(k) && fc(fm(x.get(k), k, x), v)===0;
 }
-export default hasEntry;
 
-
-import id from "./_id";
-import cmp from "./_cmp";
-import type {compareFn, mapFn, Entries} from "./_types";
 
 /**
- * Checks if map has a subset.
+ * Check if map has a subset.
  * @param x a map
- * @param y subset?
+ * @param y search subset
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
+ * @returns y ⊆ x?
  */
-function hasSubset<T, U, V=U>(x: Map<T, U>, y: Entries<T, U>, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): boolean {
-  var fc = fc||cmp, fm = fm||id;
-  for(var [k, v] of y) {
-    if(!x.has(k)) return false;
-    var u1 = fm(x.get(k), k, x);
-    var v1 = fm(v, k, y);
-    if(fc(u1, v1)!==0) return false;
+export function hasSubset<K, V, W=V>(x: Map<K, V>, y: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): boolean {
+  var fc = fc || COMPARE;
+  var fm = fm || IDENTITY;
+  for (var [k, v] of y) {
+    if (!x.has(k)) return false;
+    var wx = fm(x.get(k), k, x);
+    var wy = fm(v, k, y);
+    if (fc(wx, wy)!==0) return false;
   }
   return true;
 }
-export default hasSubset;
 
-
-import type {testFn, Entries} from "./_types";
 
 /**
- * Finds a value passing a test.
+ * Find first value passing a test (default order).
  * @param x a map
  * @param ft test function (v, k, x)
+ * @returns first v | ft(v) = true; [k, v] ∈ x
  */
-function find<T, U>(x: Entries<T, U>, ft: testFn<T, U>): U {
-  for(var [k, v] of x)
-    if(ft(v, k, x)) return v;
+export function find<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): V {
+  for (var [k, v] of x)
+    if (ft(v, k, x)) return v;
 }
-export default find;
 
-
-import type {testFn, Entries} from "./_types";
 
 /**
- * Finds values passing a test.
+ * Find values passing a test.
  * @param x a map
  * @param ft test function (v, k, x)
+ * @returns [v₀, v₁, ...] | ft(vᵢ) = true; [kᵢ, vᵢ] ∈ x
  */
-function findAll<T, U>(x: Entries<T, U>, ft: testFn<T, U>): U[] {
+export function findAll<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): V[] {
   var a = [];
-  for(var [k, v] of x)
-    if(ft(v, k, x)) a.push(v);
+  for (var [k, v] of x)
+    if (ft(v, k, x)) a.push(v);
   return a;
 }
-export default findAll;
 
-
-import type {testFn, Entries} from "./_types";
 
 /**
- * Finds key of an entry passing a test.
+ * Find key of an entry passing a test.
  * @param x a map
  * @param ft test function (v, k, x)
+ * @returns key of entry
  */
-function search<T, U>(x: Entries<T, U>, ft: testFn<T, U>): T {
-  for(var [k, v] of x)
-    if(ft(v, k, x)) return k;
+export function search<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): K {
+  for (var [k, v] of x)
+    if (ft(v, k, x)) return k;
 }
-export default search;
 
-
-import type {testFn, Entries} from "./_types";
 
 /**
- * Finds keys of entries passing a test.
+ * Find keys of entries passing a test.
  * @param x a map
  * @param ft test function (v, k, x)
+ * @returns keys of entries
  */
-function searchAll<T, U>(x: Entries<T, U>, ft: testFn<T, U>): T[] {
+export function searchAll<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): K[] {
   var a = [];
-  for(var [k, v] of x)
-    if(ft(v, k, x)) a.push(k);
+  for (var [k, v] of x)
+    if (ft(v, k, x)) a.push(k);
   return a;
 }
-export default searchAll;
 
-
-import id from "./_id";
-import cmp from "./_cmp";
-import type {compareFn, mapFn, Entries} from "./_types";
 
 /**
- * Finds key with given value.
+ * Find a key with given value.
  * @param x a map
  * @param v search value
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
+ * @returns key of value
  */
-function searchValue<T, U, V=U>(x: Entries<T, U>, v: U, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): T {
-  var fc = fc||cmp, fm = fm||id;
-  var v1 = fm(v, null, null);
-  for(var [k, u] of x) {
-    var u1 = fm(u, k, x);
-    if(fc(u1, v1)===0) return k;
+export function searchValue<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): K {
+  var fc = fc || COMPARE;
+  var fm = fm || IDENTITY;
+  var w = fm(v, null, null);
+  for (var [k, u] of x) {
+    var wx = fm(u, k, x);
+    if (fc(wx, w)===0) return k;
   }
 }
-export default searchValue;
 
-
-import id from "./_id";
-import cmp from "./_cmp";
-import type {compareFn, mapFn, Entries} from "./_types";
 
 /**
- * Finds keys with given value.
+ * Find keys with given value.
  * @param x a map
  * @param v search value
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
+ * @returns keys of value
  */
-function searchValueAll<T, U, V=U>(x: Entries<T, U>, v: U, fc: compareFn<U|V>=null, fm: mapFn<T, U, U|V>=null): T[] {
-  var fc = fc||cmp, fm = fm||id;
-  var v1 = fm(v, null, x), a = [];
+export function searchValueAll<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): K[] {
+  var fc = fc || COMPARE;
+  var fm = fm || IDENTITY;
+  var w  = fm(v, null, null), a = [];
   for(var [k, u] of x) {
-    var u1 = fm(u, k, x);
-    if(fc(u1, v1)===0) a.push(k);
+    var wx = fm(u, k, x);
+    if (fc(wx, w)===0) a.push(k);
   }
   return a;
 }
-export default searchValueAll;
-
-
-import type {testFn, Entries} from "./_types";
-
-/**
- * Finds key of first entry not passing a test.
- * @param x a map
- * @param ft test function (v, k, x)
- */
-function scanWhile<T, U>(x: Entries<T, U>, ft: testFn<T, U>): T {
-  for(var [k, v] of x)
-    if(!ft(v, k, x)) return k;
-}
-export default scanWhile;
-
-
-import search from "./search";
-import type {testFn, Entries} from "./_types";
-
-/**
- * Finds key of first entry passing a test.
- * @param x a map
- * @param ft test function (v, k, x)
- */
-function scanUntil<T, U>(x: Entries<T, U>, ft: testFn<T, U>): T {
-  return search(x, ft);
-}
-export default scanUntil;
 
 
 
@@ -895,294 +874,256 @@ export default scanUntil;
 // FUNCTIONAL
 // ----------
 
-import type {calledFn} from "./_types";
-
 /**
- * Calls a function for each value.
+ * Call a function for each value.
  * @param x a map
- * @param fc called function (v, k, x)
+ * @param fp process function (v, k, x)
  */
-function forEach<T, U>(x: Iterable<[T, U]>, fc: calledFn<T, U>): void {
-  for(var [k, v] of x)
-    fc(v, k, x);
+export function forEach<K, V>(x: Map<K, V>, fp: ProcessFunction<K, V>): void {
+  for (var [k, v] of x)
+    fp(v, k, x);
 }
-export default forEach;
 
-
-import scanUntil from "./scanUntil";
-import type {testFn, Entries} from "./_types";
 
 /**
- * Checks if any value satisfies a test.
+ * Check if any value satisfies a test.
  * @param x a map
  * @param ft test function (v, k, x)
+ * @returns true if ft(vᵢ) = true for some [kᵢ, vᵢ] ∈ x
  */
-function some<T, U>(x: Entries<T, U>, ft: testFn<T, U>): boolean {
-  return scanUntil(x, ft)!==undefined;
+export function some<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): boolean {
+  for (var [k, v] of x)
+    if (ft(v, k, x)) return true;
+  return false;
 }
-export default some;
 
-
-import scanWhile from "./scanWhile";
-import type {testFn, Entries} from "./_types";
 
 /**
- * Checks if all values satisfy a test.
+ * Check if all values satisfy a test.
  * @param x a map
  * @param ft test function (v, k, x)
+ * @returns true if ft(vᵢ) = true for all [kᵢ, vᵢ] ∈ x
  */
-function every<T, U>(x: Entries<T, U>, ft: testFn<T, U>): boolean {
-  return scanWhile(x, ft)===undefined;
+export function every<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): boolean {
+  for (var [k, v] of x)
+    if (!ft(v, k, x)) return false;
+  return true;
 }
-export default every;
 
-
-import type {Entries, mapFn} from "./_types";
 
 /**
- * Updates values based on map function.
+ * Transform values of a map.
  * @param x a map
  * @param fm map function (v, k, x)
+ * @returns \{[k₀, fm(v₀)], [k₁, fm(v₁)], ...\} | [kᵢ, vᵢ] ∈ x
  */
-function map<T, U, V=U>(x: Entries<T, U>, fm: mapFn<T, U, U|V>): Map<T, U|V> {
+export function map<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W>): Map<K, V|W> {
   var a = new Map();
-  for(var [k, v] of x)
+  for (var [k, v] of x)
     a.set(k, fm(v, k, x));
   return a;
 }
-export default map;
 
-
-import type {mapFn} from "./_types";
 
 /**
- * Updates values based on map function.
+ * Transform values of a map.
  * @param x a map (updated)
  * @param fm map function (v, k, x)
- * @returns x
+ * @returns x = \{[k₀, fm(v₀)], [k₁, fm(v₁)], ...\} | [kᵢ, vᵢ] ∈ x
  */
-function map$<T, U>(x: Map<T, U>, fm: mapFn<T, U, U>): Map<T, U> {
-  for(var [k, v] of x)
+export function map$<K, V>(x: Map<K, V>, fm: MapFunction<K, V, V>): Map<K, V> {
+  for (var [k, v] of x)
     x.set(k, fm(v, k, x));
   return x;
 }
-export default map$;
 
-
-import type {reduceFn, Entries} from "./_types";
 
 /**
- * Reduces values to a single value.
+ * Reduce values of set to a single value.
  * @param x a map
  * @param fr reduce function (acc, v, k, x)
  * @param acc initial value
+ * @returns fr(fr(acc, v₀), v₁)... | fr(acc, v₀) = v₀ if acc not given
  */
-function reduce<T, U, V=U>(x: Entries<T, U>, fr: reduceFn<T, U, U|V>, acc?: U|V): U|V {
+export function reduce<K, V, W=V>(x: Map<K, V>, fr: ReduceFunction<K, V, V|W>, acc?: V|W): V|W {
   var init = arguments.length <= 2;
-  for(var [k, v] of x) {
-    if(init) { acc = v; init = false; }
+  for (var [k, v] of x) {
+    if (init) { acc = v; init = false; }
     else acc = fr(acc, v, k, x);
   }
   return acc;
 }
-export default reduce;
 
-
-import type {testFn, Entries} from "./_types";
 
 /**
- * Keeps entries which pass a test.
+ * Keep entries which pass a test.
  * @param x a map
  * @param ft test function (v, k, x)
+ * @returns \{[k₀, v₀], [k₁, v₁], ...\} | ft(vᵢ) = true; [kᵢ, vᵢ] ∈ x
  */
-function filter<T, U>(x: Entries<T, U>, ft: testFn<T, U>): Map<T, U> {
+export function filter<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
   var a = new Map();
-  for(var [k, v] of x)
-    if(ft(v, k, x)) a.set(k, v);
+  for (var [k, v] of x)
+    if (ft(v, k, x)) a.set(k, v);
   return a;
 }
-export default filter;
 
-
-import type {testFn} from "./_types";
 
 /**
- * Keeps entries which pass a test.
+ * Keep entries which pass a test.
  * @param x an map (updated)
  * @param ft test function (v, k, x)
- * @returns x
+ * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | ft(vᵢ) = true; [kᵢ, vᵢ] ∈ x
  */
-function filter$<T, U>(x: Map<T, U>, ft: testFn<T, U>): Map<T, U> {
-  for(var [k, v] of x)
-    if(!ft(v, k, x)) x.delete(k);
+export function filter$<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
+  for (var [k, v] of x)
+    if (!ft(v, k, x)) x.delete(k);
   return x;
 }
-export default filter$;
 
 
 /**
- * Gets map with given keys.
+ * Keep values at given keys.
  * @param x a map
  * @param ks keys
+ * @returns \{[k₀, v₀], [k₁, v₁], ...\} | kᵢ ∈ ks; [kᵢ, vᵢ] ∈ x
  */
- function filterAt<T, U>(x: Map<T, U>, ks: T[]): Map<T, U> {
+export function filterAt<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
   var a = new Map();
-  for(var k of ks)
+  for (var k of ks)
     a.set(k, x.get(k));
   return a;
 }
-export default filterAt;
 
 
 /**
- * Gets map with given keys.
+ * Keep values at given keys.
  * @param x a map (updated)
  * @param ks keys
- * @returns x
+ * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | kᵢ ∈ ks; [kᵢ, vᵢ] ∈ x
  */
- function filterAt$<T, U>(x: Map<T, U>, ks: T[]): Map<T, U> {
-  for(var k of x.keys())
-    if(!ks.includes(k)) x.delete(k);
+export function filterAt$<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
+  for (var k of x.keys())
+    if (!ks.includes(k)) x.delete(k);
   return x;
 }
-export default filterAt$;
 
-
-import type {testFn, Entries} from "./_types";
 
 /**
- * Discards entries which pass a test.
+ * Discard entries which pass a test.
  * @param x a map
  * @param ft test function (v, k, x)
+ * @returns \{[k₀, v₀], [k₁, v₁], ...\} | ft(vᵢ) = false; [kᵢ, vᵢ] ∈ x
  */
-function reject<T, U>(x: Entries<T, U>, ft: testFn<T, U>): Map<T, U> {
+export function reject<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
   var a = new Map();
-  for(var [k, v] of x)
-    if(!ft(v, k, x)) a.set(k, v);
+  for (var [k, v] of x)
+    if (!ft(v, k, x)) a.set(k, v);
   return a;
 }
-export default reject;
 
-
-import type {testFn} from "./_types";
 
 /**
- * Discards entries which pass a test.
+ * Discard entries which pass a test.
  * @param x a map (updated)
  * @param ft test function (v, k, x)
- * @returns x
+ * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | ft(vᵢ) = false; [kᵢ, vᵢ] ∈ x
  */
-function reject$<T, U>(x: Map<T, U>, ft: testFn<T, U>): Map<T, U> {
-  for(var [k, v] of x)
-    if(ft(v, k, x)) x.delete(k);
+export function reject$<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
+  for (var [k, v] of x)
+    if (ft(v, k, x)) x.delete(k);
   return x;
 }
-export default reject$;
 
-
-import rejectAt$ from "./rejectAt$";
-import type {Entries} from "./_types";
 
 /**
- * Gets map without given keys.
+ * Discard values at given keys.
  * @param x a map
  * @param ks keys
+ * @returns \{[k₀, v₀], [k₁, v₁], ...\} | kᵢ ∉ ks; [kᵢ, vᵢ] ∈ x
  */
-function rejectAt<T, U>(x: Entries<T, U>, ks: T[]): Map<T, U> {
+export function rejectAt<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
   return rejectAt$(new Map(x), ks);
 }
-export default rejectAt;
 
 
 /**
- * Gets map without given keys.
+ * Discard values at given keys.
  * @param x a map (updated)
  * @param ks keys
- * @returns x
+ * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | kᵢ ∉ ks; [kᵢ, vᵢ] ∈ x
  */
- function rejectAt$<T, U>(x: Map<T, U>, ks: T[]): Map<T, U> {
-  for(var k of ks)
+export function rejectAt$<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
+  for (var k of ks)
     x.delete(k);
   return x;
 }
-export default rejectAt$;
 
 
-import id from "./_id";
-import is from "./is";
-import type {mapFn, testFn, Entries} from "./_types";
+/**
+ * Flatten nested map to given depth.
+ * @param x a nested map
+ * @param n maximum depth [-1 ⇒ all]
+ * @param fm map function (v, k, x)
+ * @param ft test function for flatten (v, k, x) [is]
+ * @returns flat map
+ */
+export function flat<K>(x: Map<K, any>, n: number=-1, fm: MapFunction<K, any, any> | null=null, ft: TestFunction<K, any> | null=null): Map<K, any> {
+  var fm = fm || IDENTITY;
+  var ft = ft || is;
+  return flatTo$(new Map(), x, n, fm, ft);
+}
 
-function flatTo<T>(x: Entries<T, any>, n: number, fm: mapFn<T, any, any>, ft: testFn<T, any>, a: Map<T, any>): Map<T, any> {
-  for(var [k, v] of x) {
-    var v1 = fm(v, k, x);
-    if(n!==0 && ft(v1, k, x)) flatTo(v1, n-1, fm, ft, a);
-    else a.set(k, v1);
+function flatTo$<K>(a: Map<K, any>, x: Map<K, any>, n: number, fm: MapFunction<K, any, any>, ft: TestFunction<K, any>): Map<K, any> {
+  for (var [k, v] of x) {
+    var w = fm(v, k, x);
+    if (n!==0 && ft(w, k, x)) flatTo$(a, w, n-1, fm, ft);
+    else a.set(k, w);
   }
   return a;
 }
 
-/**
- * Flattens nested map to given depth.
- * @param x a nested map
- * @param n maximum depth (-1 => all)
- * @param fm map function (v, k, x)
- * @param ft test function (v, k, x)
- */
-function flat<T>(x: Entries<T, any>, n: number=-1, fm: mapFn<T, any, any>=null, ft: testFn<T, any>=null): Map<T, any> {
-  var fm = fm||id, ft = ft||is;
-  return flatTo(x, n, fm, ft, new Map());
-}
-export default flat;
-
-
-import id from "./_id";
-import is from "./is";
-import concat$ from "./concat$";
-import type {mapFn, testFn, Entries} from "./_types";
 
 /**
- * Flattens nested map, using map function.
+ * Flatten nested map, based on map function.
  * @param x a nested map
  * @param fm map function (v, k, x)
- * @param ft test function (v, k, x)
+ * @param ft test function for flatten (v, k, x) [is]
+ * @returns flat map
  */
-function flatMap<T>(x: Entries<T, any>, fm: mapFn<T, any, any>=null, ft: testFn<T, any>=null): Map<T, any> {
-  var fm = fm||id, ft = ft||is;
-  var a = new Map();
-  for(var [k, v] of x) {
-    var v1 = fm(v, k, x);
-    if(ft(v1, k, x)) concat$(a, v1);
-    else a.set(k, v1);
+export function flatMap<K>(x: Map<K, any>, fm: MapFunction<K, any, any> | null=null, ft: TestFunction<K, any> | null=null): Map<K, any> {
+  var fm = fm || IDENTITY;
+  var ft = ft || is;
+  var a  = new Map();
+  for (var [k, v] of x) {
+    var w = fm(v, k, x);
+    if (ft(w, k, x)) concat$(a, w);
+    else a.set(k, w);
   }
   return a;
 }
-export default flatMap;
 
-
-import id from "./_id";
-import unionKeys from "./unionKeys";
-import {some} from "extra-iterable";
-import type {mapFn, tillFn} from "./_types";
 
 /**
- * Combines matching entries from maps.
+ * Combine matching entries from maps.
  * @param xs maps
  * @param fm map function (vs, k)
- * @param ft till function (dones) (some)
+ * @param fe end function (dones) [array.some]
  * @param vd default value
+ * @returns [fm([x₀[k₀], x₁[k₀], ...]), fm([x₀[k₁], x₁[k₁], ...]), ...]
  */
-function zip<T, U, V=U>(xs: Map<T, U>[], fm: mapFn<T, U[], U[]|V>=null, ft: tillFn=null, vd?: U): Map<T, U[]|V> {
-  var fm = fm||id, ft = ft||some as tillFn;
+export function zip<K, V, W=V>(xs: Map<K, V>[], fm: MapFunction<K, V[], V[]|W> | null=null, fe: EndFunction=null, vd?: V): Map<K, V[]|W> {
+  var fm = fm || IDENTITY;
+  var fe = fe || arraySome as EndFunction;
   var ks = unionKeys(...xs), a = new Map();
-  for(var k of ks) {
+  for (var k of ks) {
     var ds = xs.map(x => !x.has(k));
-    if(ft(ds)) break;
+    if (fe(ds)) break;
     var vs = xs.map(x => !x.has(k)? vd : x.get(k));
     a.set(k, fm(vs, k, null));
   }
   return a;
 }
-export default zip;
 
 
 
@@ -1190,88 +1131,54 @@ export default zip;
 // MANIPULATION
 // ------------
 
-import shift$ from "./shift$";
-import type {Entries} from "./_types";
-
 /**
- * Removes first entry.
- * @param x a map
- */
-function shift<T, U>(x: Entries<T, U>): Map<T, U> {
-  return shift$(new Map(x));
-}
-export default shift;
-
-
-import drop$ from "./drop$";
-
-/**
- * Removes first entry.
- * @param x a map (updated)
- * @returns x
- */
-function shift$<T, U>(x: Map<T, U>): Map<T, U> {
-  return drop$(x, 1);
-}
-export default shift$;
-
-
-import type {testFn, Entries} from "./_types";
-
-/**
- * Segregates values by test result.
+ * Segregate entries by test result.
  * @param x a map
  * @param ft test function (v, k, x)
  * @returns [satisfies, doesnt]
  */
-function partition<T, U>(x: Entries<T, U>, ft: testFn<T, U>): [Map<T, U>, Map<T, U>] {
+export function partition<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): [Map<K, V>, Map<K, V>] {
   var t = new Map();
   var f = new Map();
-  for(var [k, v] of x) {
-    if(ft(v, k, x)) t.set(k, v);
+  for (var [k, v] of x) {
+    if (ft(v, k, x)) t.set(k, v);
     else f.set(k, v);
   }
   return [t, f];
 }
-export default partition;
 
-
-import id from "./_id";
-import type {mapFn, Entries} from "./_types";
 
 /**
- * Segregates values by similarity.
+ * Segregate entries by similarity.
  * @param x a map
  * @param fm map function (v, k, x)
+ * @returns Map \{key ⇒ values\}
  */
-function partitionAs<T, U, V=U>(x: Entries<T, U>, fm: mapFn<T, U, U|V>): Map<U|V, Map<T, U>> {
-  var fm = fm||id;
-  var a = new Map();
-  for(var [k, v] of x) {
-    var v1 = fm(v, k, x);
-    if(!a.has(v1)) a.set(v1, new Map());
-    a.get(v1).set(k, v);
+export function partitionAs<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W>): Map<V|W, Map<K, V>> {
+  var fm = fm || IDENTITY;
+  var a  = new Map();
+  for (var [k, v] of x) {
+    var w = fm(v, k, x);
+    if (!a.has(w)) a.set(w, new Map());
+    a.get(w).set(k, v);
   }
   return a;
 }
-export default partitionAs;
 
-
-import filterAt from "./filterAt";
 
 /**
- * Breaks map into chunks of given size.
+ * Break map into chunks of given size.
  * @param x a map
- * @param n chunk size (1)
- * @param s chunk step (n)
+ * @param n chunk size [1]
+ * @param s chunk step [n]
+ * @returns [x[0..n], x[s..s+n], x[2s..2s+n], ...]
  */
-function chunk<T, U>(x: Map<T, U>, n: number=1, s: number=n): Map<T, U>[] {
+export function chunk<K, V>(x: Map<K, V>, n: number=1, s: number=n): Map<K, V>[] {
   var ks = [...x.keys()], a = [];
-  for(var i=0, I=ks.length; i<I; i+=s)
+  for (var i=0, I=ks.length; i<I; i+=s)
     a.push(filterAt(x, ks.slice(i, i+n)));
   return a;
 }
-export default chunk;
 
 
 
@@ -1279,52 +1186,44 @@ export default chunk;
 // COMBINE
 // -------
 
-import concat$ from "./concat$";
-import type {Entries} from "./_types";
-
 /**
- * Appends entries from maps, preferring last.
+ * Append entries from maps, preferring last.
  * @param xs maps
+ * @returns x₀ ∪ x₁ ∪ ... | [x₀, x₁, ...] = xs
  */
-function concat<T, U>(...xs: Entries<T, U>[]): Map<T, U> {
+export function concat<K, V>(...xs: Entries<K, V>[]): Map<K, V> {
   return concat$(new Map(), ...xs);
 }
-export default concat;
 
-
-import type {Entries} from "./_types";
 
 /**
- * Appends entries from maps, preferring last.
- * @param x a maps (updated)
+ * Append entries from maps, preferring last.
+ * @param x a map (updated)
  * @param ys other maps
- * @returns x
+ * @returns x = x ∪ y₀ ∪ y₁ ∪ ... | [y₀, y₁, ...] = ys
  */
-function concat$<T, U>(x: Map<T, U>, ...ys: Entries<T, U>[]): Map<T, U> {
-  for(var y of ys) {
-    for(var [k, v] of y)
+export function concat$<K, V>(x: Map<K, V>, ...ys: Entries<K, V>[]): Map<K, V> {
+  for (var y of ys) {
+    for (var [k, v] of y)
       x.set(k, v);
   }
   return x;
 }
-export default concat$;
 
-
-import type {Entries} from "./_types";
 
 /**
- * Joins entries together.
+ * Join entries together into a string.
  * @param x a map
- * @param sep separator (,)
- * @param asc associator (=)
+ * @param sep separator [,]
+ * @param asc associator [=]
+ * @returns "$\{k₀\}=$\{v₀\},$\{k₁\}=$\{v₁\}..." | [kᵢ, vᵢ] ∈ x
  */
-function join<T, U>(x: Entries<T, U>, sep: string=",", asc: string="="): string {
+export function join<K, V>(x: Entries<K, V>, sep: string=",", asc: string="="): string {
   var a = "";
-  for(var [k, v] of x)
-    a += k+asc+v+sep;
+  for (var [k, v] of x)
+    a += k + asc + v + sep;
   return a.slice(0, -sep.length);
 }
-export default join;
 
 
 
@@ -1332,223 +1231,189 @@ export default join;
 // SET OPERATIONS
 // --------------
 
-import {Entries} from "./_types";
-
 /**
- * Checks if maps have no common keys.
+ * Check if maps have no common keys.
  * @param x a map
  * @param y another map
+ * @returns x ∩ y = Φ?
  */
-function isDisjoint<T, U>(x: Map<T, U>, y: Entries<T, U>): boolean {
-  for(var [k] of y)
-    if(x.has(k)) return false;
+export function isDisjoint<K, V>(x: Map<K, V>, y: Entries<K, V>): boolean {
+  for (var [k] of y)
+    if (x.has(k)) return false;
   return true;
 }
-export default isDisjoint;
 
-
-import type {Entries} from "./_types";
 
 /**
- * Gives keys present in any map.
+ * Give keys present in any map.
  * @param xs maps
+ * @returns [k₀, k₁, ...] | [kᵢ, vᵢ] ∈ x₀ ∪ x₁, ...; [x₀, x₁, ...] = xs
  */
-function unionKeys<T, U>(...xs: Entries<T, U>[]): Set<T> {
-  var a = new Set<T>();
-  for(var x of xs) {
-    for(var [k] of x)
+export function unionKeys<K, V>(...xs: Entries<K, V>[]): Set<K> {
+  var a = new Set<K>();
+  for (var x of xs) {
+    for (var [k] of x)
       a.add(k);
   }
   return a;
 }
-export default unionKeys;
 
-
-import union$ from "./union$";
-import type {combineFn, Entries} from "./_types";
 
 /**
- * Gives entries present in any map.
+ * Give entries present in any map.
  * @param x a map
  * @param y another map
  * @param fc combine function (a, b)
+ * @returns x ∪ y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x or [kᵢ, vᵢ] ∈ y\}
  */
-function union<T, U>(x: Entries<T, U>, y: Entries<T, U>, fc: combineFn<U>=null): Map<T, U> {
+export function union<K, V>(x: Entries<K, V>, y: Entries<K, V>, fc: CombineFunction<V> | null=null): Map<K, V> {
   return union$(new Map(x), y, fc);
 }
-export default union;
 
 
-import id from "./_id";
-import type {combineFn, Entries} from "./_types";
 
 /**
- * Gives entries present in any map.
+ * Give entries present in any map.
  * @param x a map (updated)
  * @param y another map
  * @param fc combine function (a, b)
- * @returns x
+ * @returns x = x ∪ y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x or [kᵢ, vᵢ] ∈ y\}
  */
-function union$<T, U>(x: Map<T, U>, y: Entries<T, U>, fc: combineFn<U>=null): Map<T, U> {
-  var fc = fc||id;
-  for(var [k, v] of y) {
-    if(!x.has(k)) x.set(k, v);
+export function union$<K, V>(x: Map<K, V>, y: Entries<K, V>, fc: CombineFunction<V> | null=null): Map<K, V> {
+  var fc = fc || IDENTITY;
+  for (var [k, v] of y) {
+    if (!x.has(k)) x.set(k, v);
     else x.set(k, fc(x.get(k), v));
   }
   return x;
 }
-export default union$;
 
 
 /**
- * Gives keys present in all maps.
+ * Give keys present in all maps.
  * @param xs maps
+ * @returns [k₀, k₁, ...] | [kᵢ, vᵢ] ∈ x₀ ∩ x₁, ...; [x₀, x₁, ...] = xs
  */
- function intersectionKeys<T, U>(...xs: Map<T, U>[]): Set<T> {
-  var a = new Set<T>();
-  if(xs.length===0) return a;
+export function intersectionKeys<K, V>(...xs: Map<K, V>[]): Set<K> {
+  var a = new Set<K>();
+  if (xs.length===0) return a;
   var x = xs[0], ys = xs.slice(1);
-  x: for(var k of x.keys()) {
-    for(var y of ys)
-      if(!y.has(k)) continue x;
+  LOOPX: for (var k of x.keys()) {
+    for (var y of ys)
+      if (!y.has(k)) continue LOOPX;
     a.add(k);
   }
   return a;
 }
-export default intersectionKeys;
 
-
-import id from "./_id";
-import type {combineFn, Entries} from "./_types";
 
 /**
- * Gives entries present in both maps.
+ * Give entries present in both maps.
  * @param x a map
  * @param y another map
  * @param fc combine function (a, b)
+ * @returns x ∩ y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x and [kᵢ, vᵢ] ∈ y\}
  */
-function intersection<T, U>(x: Map<T, U>, y: Entries<T, U>, fc: combineFn<U>=null): Map<T, U> {
-  var fc = fc||id;
-  var a = new Map();
-  for(var [k, v] of y)
-    if(x.has(k)) a.set(k, fc(x.get(k), v));
+export function intersection<K, V>(x: Map<K, V>, y: Entries<K, V>, fc: CombineFunction<V> | null=null): Map<K, V> {
+  var fc = fc || IDENTITY;
+  var a  = new Map();
+  for (var [k, v] of y)
+    if (x.has(k)) a.set(k, fc(x.get(k), v));
   return a;
 }
-export default intersection;
 
-
-import id from "./_id";
-import rejectAt$ from "./rejectAt$";
-import type {combineFn} from "./_types";
 
 /**
- * Gives entries present in both maps.
+ * Give entries present in both maps.
  * @param x a map (updated)
  * @param y another map
  * @param fc combine function (a, b)
- * @returns x
+ * @returns x = x ∩ y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x and [kᵢ, vᵢ] ∈ y\}
  */
-function intersection$<T, U>(x: Map<T, U>, y: Map<T, U>, fc: combineFn<U>=null): Map<T, U> {
-  var fc = fc||id, ks = [];
-  for(var [k, u] of [...x]) {
-    if(!y.has(k)) ks.push(k);
+export function intersection$<K, V>(x: Map<K, V>, y: Map<K, V>, fc: CombineFunction<V> | null=null): Map<K, V> {
+  var fc = fc || IDENTITY, ks = [];
+  for (var [k, u] of [...x]) {
+    if (!y.has(k)) ks.push(k);
     x.set(k, fc(u, y.get(k)));
   }
   return rejectAt$(x, ks);
 }
-export default intersection$;
 
-
-import difference$ from "./difference$";
-import type {Entries} from "./_types";
 
 /**
- * Gives entries of map not present in another.
+ * Give entries not present in another map.
  * @param x a map
  * @param y another map
+ * @returns x - y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x, [kᵢ, *] ∉ y\}
  */
-function difference<T, U>(x: Entries<T, U>, y: Entries<T, U>): Map<T, U> {
+export function difference<K, V>(x: Entries<K, V>, y: Entries<K, V>): Map<K, V> {
   return difference$(new Map(x), y);
 }
-export default difference;
 
-
-import type {Entries} from "./_types";
 
 /**
- * Gives entries of map not present in another.
+ * Give entries not present in another map.
  * @param x a map (updated)
  * @param y another map
- * @returns x
+ * @returns x = x - y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x, [kᵢ, *] ∉ y\}
  */
-function difference$<T, U>(x: Map<T, U>, y: Entries<T, U>): Map<T, U> {
-  for(var [k] of y)
+export function difference$<K, V>(x: Map<K, V>, y: Entries<K, V>): Map<K, V> {
+  for (var [k] of y)
     x.delete(k);
   return x;
 }
-export default difference$;
 
-
-import symmetricDifference$ from "./symmetricDifference$";
-import type {Entries} from "./_types";
 
 /**
- * Gives entries not present in both maps.
+ * Give entries not present in both maps.
  * @param x a map
  * @param y another map
+ * @returns x-y ∪ y-x
  */
-function symmetricDifference<T, U>(x: Entries<T, U>, y: Entries<T, U>): Map<T, U> {
+export function symmetricDifference<K, V>(x: Entries<K, V>, y: Entries<K, V>): Map<K, V> {
   return symmetricDifference$(new Map(x), y);
 }
-export default symmetricDifference;
 
-
-import type {Entries} from "./_types";
 
 /**
- * Gives entries not present in both maps.
+ * Give entries not present in both maps.
  * @param x a map (updated)
  * @param y another map
- * @returns x
+ * @returns x = x-y ∪ y-x
  */
-function symmetricDifference$<T, U>(x: Map<T, U>, y: Entries<T, U>): Map<T, U> {
-  for(var [k, v] of y) {
-    if(x.has(k)) x.delete(k);
+export function symmetricDifference$<K, V>(x: Map<K, V>, y: Entries<K, V>): Map<K, V> {
+  for (var [k, v] of y) {
+    if (x.has(k)) x.delete(k);
     else x.set(k, v);
   }
   return x;
 }
-export default symmetricDifference$;
 
-
-import id from "./_id";
-import type {mapFn} from "./_types";
 
 /**
- * Lists cartesian product of maps.
+ * List cartesian product of maps.
  * @param xs maps
  * @param fm map function (vs, i)
+ * @returns x₀ × x₁ × ... = \{\{[k₀, v₀], [k₁, v₁], ...\} | [k₀, v₀] ∈ x₀, [k₁, v₁] ∈ x₁, ...]\}
  */
-function* cartesianProduct<T, U, V=Map<T, U>>(xs: Map<T, U>[], fm: mapFn<number, Map<T, U>, Map<T, U>|V>=null): IterableIterator<Map<T, U>|V> {
-  var fm = fm||id;
-  var XS  = xs.length;
-  var kss = xs.map(x => [...x.keys()]);
-  var ls = kss.map(ks => ks.length);
-  var is = kss.map(ks => 0);
-  for(var j=0;; j++) {
-    var a = new Map<T, U>();
-    for(var n=0; n<XS; n++) {
-      var i  = is[n],  x = xs[n];
-      var ks = kss[n], k = ks[i];
+export function* cartesianProduct<K, V, W=Map<K, V>>(xs: Map<K, V>[], fm: MapFunction<number, Map<K, V>, Map<K, V>|W> | null=null): IterableIterator<Map<K, V>|W> {
+  var fm = fm || IDENTITY;
+  var XS = xs.length;
+  var kx = xs.map(x => [...x.keys()]);
+  var ls = kx.map(ks => ks.length);
+  var is = kx.map(ks => 0);
+  for (var j=0;; ++j) {
+    var a = new Map<K, V>();
+    for (var n=0; n<XS; ++n) {
+      var i  = is[n], x = xs[n];
+      var ks = kx[n], k = ks[i];
       a.set(k, x.get(k));
     }
     yield fm(a, j, null);
-    for(var r=XS-1; r>=0; r--) {
-      is[r]++;
-      if(is[r]<ls[r]) break;
+    for (var r=XS-1; r>=0; --r) {
+      if (++is[r] < ls[r]) break;
       is[r] = 0;
     }
-    if(r<0) break;
+    if (r<0) break;
   }
 }
-export default cartesianProduct;
