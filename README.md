@@ -176,6 +176,7 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 
 [![](https://img.youtube.com/vi/dMxIjGjMJz0/maxresdefault.jpg)](https://www.youtube.com/watch?v=dMxIjGjMJz0)
 [![ORG](https://img.shields.io/badge/org-nodef-green?logo=Org)](https://nodef.github.io)
+[![DOI](https://zenodo.org/badge/133659342.svg)](https://zenodo.org/badge/latestdoi/133659342)
 [![Coverage Status](https://coveralls.io/repos/github/nodef/extra-map/badge.svg?branch=master)](https://coveralls.io/github/nodef/extra-map?branch=master)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6d1d66699747ff804674/test_coverage)](https://codeclimate.com/github/nodef/extra-map/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/6d1d66699747ff804674/maintainability)](https://codeclimate.com/github/nodef/extra-map/maintainability)
