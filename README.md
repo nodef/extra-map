@@ -24,7 +24,7 @@ Methods as separate packages:
 <br>
 
 ```javascript
-const map = require("extra-map");
+const map = require('extra-map');
 // import * as map from "extra-map";
 // import * as map from "https://unpkg.com/extra-map@2.1.0/index.mjs"; (deno)
 
