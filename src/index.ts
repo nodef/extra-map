@@ -469,7 +469,7 @@ export function count<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): number {
  * @param fm map function (v, k, x)
  * @returns Map \{value ⇒ count\}
  */
-export function countAs<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W>): Map<V|W, number> {
+export function countAs<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W> | null=null): Map<V|W, number> {
   var fm = fm || IDENTITY;
   var a  = new Map();
   for (var [k, v] of x) {
@@ -569,8 +569,6 @@ export function rangeEntries<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> |
 
 // PART
 // ----
-
-import {head as iterableHead} from "extra-iterable";
 
 /**
  * Get first entry from map (default order).

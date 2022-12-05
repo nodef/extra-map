@@ -1,6 +1,6 @@
 {
   "name": "extra-map",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "A map is a collection of key-value pairs, with unique keys.",
   "main": "index.js",
   "module": "index.mjs",
@@ -10,7 +10,7 @@
     "import": "./index.mjs"
   },
   "scripts": {
-    "test": "exit",
+    "test": "jest",
     "build": "node ./build",
     "publish-docs": "node ./build publish-docs",
     "publish-packages": "node ./build publish-packages"
@@ -32,7 +32,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.3",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "@types/jest": "^29.2.3",
+    "@types/jest": "^29.2.4",
     "extra-array": "^3.1.6",
     "extra-build": "^2.2.39",
     "extra-function": "^1.1.15",
