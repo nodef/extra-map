@@ -368,11 +368,11 @@ export function set$<K, V>(x: Map<K, V>, k: K, v: V): Map<K, V> {
 
 
 /**
- * Sets value at path in a nested map.
+ * Set value at path in a nested map.
  * @param x a nested map (updated)
  * @param p path
  * @param v value
- * @returns x
+ * @returns x | x[k₀][k₁][...] = v; [k₀, k₁, ...] = p
  */
 export function setPath$<K>(x: Map<K, any>, p: K[], v: any): Map<K, any> {
   var y = getPath(x, p.slice(0, -1));
@@ -435,7 +435,7 @@ export function remove$<K, V>(x: Map<K, V>, k: K): Map<K, V> {
  * Remove value at path in a nested map.
  * @param x a nested map (updated)
  * @param p path
- * @returns x = x \\: [i₀][i₁][...] | [i₀, i₁, ...] = p
+ * @returns x = x \\: [k₀][k₁][...] | [k₀, k₁, ...] = p
  */
 export function removePath$<K>(x: Map<K, any>, p: K[]): Map<K, any> {
   var y = getPath(x, p.slice(0, -1));
@@ -685,7 +685,6 @@ export {randomKey as key};
 /**
  * Pick an arbitrary entry.
  * @param x a map
- * @param x a map
  * @param fr random number generator ([0, 1))
  * @returns [kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x
  */
@@ -702,7 +701,7 @@ export {randomEntry as entry};
  * @param fr random number generator ([0, 1))
  * @returns \{[kᵢ, vᵢ], [kⱼ, vⱼ], ...\} | [kᵢ, vᵢ], [kⱼ, vⱼ], ... ∈ x; |\{[kᵢ, vᵢ], [kⱼ, vⱼ], ...\}| = |x| if n<0 else n
  */
-export function randomSubset<K, V>(x: Map<K, V>, n: number=-1, fr: ReadFunction<number>=Math.random): Map<K, V> {
+export function randomSubset<K, V>(x: Map<K, V>, n: number=-1, fr: ReadFunction<number> | null=Math.random): Map<K, V> {
   var ks = arrayRandomSubsequence([...x.keys()], n, fr);
   return filterAt(x, ks);
 }
@@ -718,7 +717,7 @@ export {randomSubset as subset};
  * Check if map has a key.
  * @param x a map
  * @param k search key
- * @returns [k, v] ∈ x?
+ * @returns [k, *] ∈ x?
  */
 export function has<K, V>(x: Map<K, V>, k: K): boolean {
   return x.has(k);
@@ -729,7 +728,7 @@ export {has as hasKey};
 /**
  * Check if map has a value.
  * @param x a map
- * @param v value?
+ * @param v search value
  * @param fc compare function (a, b)
  * @param fm map function (v, k, x)
  * @returns [*, v] ∈ x?
