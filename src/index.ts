@@ -1242,7 +1242,7 @@ export function isDisjoint<K, V>(x: Map<K, V>, y: Entries<K, V>): boolean {
 
 
 /**
- * Give keys present in any map.
+ * Obtain keys present in any map.
  * @param xs maps
  * @returns [k₀, k₁, ...] | [kᵢ, vᵢ] ∈ x₀ ∪ x₁, ...; [x₀, x₁, ...] = xs
  */
@@ -1257,7 +1257,7 @@ export function unionKeys<K, V>(...xs: Entries<K, V>[]): Set<K> {
 
 
 /**
- * Give entries present in any map.
+ * Obtain entries present in any map.
  * @param x a map
  * @param y another map
  * @param fc combine function (a, b)
@@ -1270,7 +1270,7 @@ export function union<K, V>(x: Entries<K, V>, y: Entries<K, V>, fc: CombineFunct
 
 
 /**
- * Give entries present in any map.
+ * Obtain entries present in any map.
  * @param x a map (updated)
  * @param y another map
  * @param fc combine function (a, b)
@@ -1287,7 +1287,7 @@ export function union$<K, V>(x: Map<K, V>, y: Entries<K, V>, fc: CombineFunction
 
 
 /**
- * Give keys present in all maps.
+ * Obtain keys present in all maps.
  * @param xs maps
  * @returns [k₀, k₁, ...] | [kᵢ, vᵢ] ∈ x₀ ∩ x₁, ...; [x₀, x₁, ...] = xs
  */
@@ -1305,7 +1305,7 @@ export function intersectionKeys<K, V>(...xs: Map<K, V>[]): Set<K> {
 
 
 /**
- * Give entries present in both maps.
+ * Obtain entries present in both maps.
  * @param x a map
  * @param y another map
  * @param fc combine function (a, b)
@@ -1321,7 +1321,7 @@ export function intersection<K, V>(x: Map<K, V>, y: Entries<K, V>, fc: CombineFu
 
 
 /**
- * Give entries present in both maps.
+ * Obtain entries present in both maps.
  * @param x a map (updated)
  * @param y another map
  * @param fc combine function (a, b)
@@ -1338,7 +1338,7 @@ export function intersection$<K, V>(x: Map<K, V>, y: Map<K, V>, fc: CombineFunct
 
 
 /**
- * Give entries not present in another map.
+ * Obtain entries not present in another map.
  * @param x a map
  * @param y another map
  * @returns x - y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x, [kᵢ, *] ∉ y\}
@@ -1349,7 +1349,7 @@ export function difference<K, V>(x: Entries<K, V>, y: Entries<K, V>): Map<K, V> 
 
 
 /**
- * Give entries not present in another map.
+ * Obtain entries not present in another map.
  * @param x a map (updated)
  * @param y another map
  * @returns x = x - y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x, [kᵢ, *] ∉ y\}
@@ -1362,7 +1362,7 @@ export function difference$<K, V>(x: Map<K, V>, y: Entries<K, V>): Map<K, V> {
 
 
 /**
- * Give entries not present in both maps.
+ * Obtain entries not present in both maps.
  * @param x a map
  * @param y another map
  * @returns x-y ∪ y-x
@@ -1373,7 +1373,7 @@ export function symmetricDifference<K, V>(x: Entries<K, V>, y: Entries<K, V>): M
 
 
 /**
- * Give entries not present in both maps.
+ * Obtain entries not present in both maps.
  * @param x a map (updated)
  * @param y another map
  * @returns x = x-y ∪ y-x

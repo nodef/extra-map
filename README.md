@@ -92,7 +92,7 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 | [hasPath] | Check if nested map has a path. |
 | [set] | Set value at key. |
 | [set$] | Set value at key. |
-| [setPath$] | Sets value at path in a nested map. |
+| [setPath$] | Set value at path in a nested map. |
 | [swap] | Exchange two values. |
 | [swap$] | Exchange two values. |
 | [remove] | Remove value at key. |
@@ -158,16 +158,16 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 | [join] | Join entries together into a string. |
 |  |  |
 | [isDisjoint] | Check if maps have no common keys. |
-| [unionKeys] | Give keys present in any map. |
-| [union] | Give entries present in any map. |
-| [union$] | Give entries present in any map. |
-| [intersectionKeys] | Give keys present in all maps. |
-| [intersection] | Give entries present in both maps. |
-| [intersection$] | Give entries present in both maps. |
-| [difference] | Give entries not present in another map. |
-| [difference$] | Give entries not present in another map. |
-| [symmetricDifference] | Give entries not present in both maps. |
-| [symmetricDifference$] | Give entries not present in both maps. |
+| [unionKeys] | Obtain keys present in any map. |
+| [union] | Obtain entries present in any map. |
+| [union$] | Obtain entries present in any map. |
+| [intersectionKeys] | Obtain keys present in all maps. |
+| [intersection] | Obtain entries present in both maps. |
+| [intersection$] | Obtain entries present in both maps. |
+| [difference] | Obtain entries not present in another map. |
+| [difference$] | Obtain entries not present in another map. |
+| [symmetricDifference] | Obtain entries not present in both maps. |
+| [symmetricDifference$] | Obtain entries not present in both maps. |
 | [cartesianProduct] | List cartesian product of maps. |
 
 <br>
