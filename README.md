@@ -180,6 +180,7 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 [![Coverage Status](https://coveralls.io/repos/github/nodef/extra-map/badge.svg?branch=master)](https://coveralls.io/github/nodef/extra-map?branch=master)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6d1d66699747ff804674/test_coverage)](https://codeclimate.com/github/nodef/extra-map/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/6d1d66699747ff804674/maintainability)](https://codeclimate.com/github/nodef/extra-map/maintainability)
+![](https://ga-beacon.deno.dev/G-RC63DPBH3P:SH3Eq-NoQ9mwgYeHWxu7cw/github.com/nodef/extra-map)
 
 
 [is]: https://github.com/nodef/extra-map/wiki/is
