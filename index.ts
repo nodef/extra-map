@@ -1,17 +1,17 @@
 import {
   IDENTITY,
   COMPARE,
-} from "extra-function";
-import {
+} from "@nodef/extra-function";
+import type {
   MapFunction as IterableMapFunction,
-} from "extra-iterable";
+} from "@nodef/extra-iterable";
 import {
   last         as arrayLast,
   some         as arraySome,
   subsequences as arraySubsequences,
   randomValue  as arrayRandomValue,
   randomSubsequence as arrayRandomSubsequence,
-} from "extra-array";
+} from "@nodef/extra-array";
 
 
 
@@ -78,7 +78,7 @@ export type TestFunction<K, V> = (v: V, k: K, x: Map<K, V>) => boolean;
  * @param x map containing the value
  * @returns transformed value
  */
-export type MapFunction<K, V, W> = (v: V, k: K, x: Map<K, V>) => W;
+export type MapFunction<K, V, W> = (v: V, k: K, x: Map<K, V> | null) => W;
 
 
 /**
@@ -113,7 +113,7 @@ export type EndFunction = (dones: boolean[]) => boolean;
  * @param v value
  * @returns v is a map?
  */
-export function is(v: any): v is Map<any, any> {
+export function is(v: unknown): v is Map<unknown, unknown> {
   return v instanceof Map;
 }
 
@@ -181,10 +181,10 @@ export {from$ as fromEntries$};
  * @returns x as map
  */
 export function fromLists<K, V>(x: Lists<K, V>): Map<K, V> {
-  var [ks, vs] = x;
-  var iv = vs[Symbol.iterator]();
-  var a  = new Map<K, V>();
-  for (var k of ks)
+  const [ks, vs] = x;
+  const iv = vs[Symbol.iterator]();
+  const a  = new Map<K, V>();
+  for (const k of ks)
     a.set(k, iv.next().value);
   return a;
 }
@@ -197,9 +197,9 @@ export function fromLists<K, V>(x: Lists<K, V>): Map<K, V> {
  * @returns x as map
  */
 export function fromKeys<K, V=K>(x: Iterable<K>, fm: IterableMapFunction<K, K|V> | null=null): Map<K, K|V> {
-  var fm = fm || IDENTITY;
-  var a  = new Map<K, K|V>(), i = -1;
-  for (var k of x)
+  fm = fm || IDENTITY;
+  const a = new Map<K, K|V>(); let i = -1;
+  for (const k of x)
     a.set(k, fm(k, ++i, x));
   return a;
 }
@@ -212,9 +212,9 @@ export function fromKeys<K, V=K>(x: Iterable<K>, fm: IterableMapFunction<K, K|V>
  * @returns x as map
  */
 export function fromValues<V, K=V>(x: Iterable<V>, fm: IterableMapFunction<V, V|K> | null=null): Map<V|K, V> {
-  var fm = fm || IDENTITY;
-  var a  = new Map<V|K, V>(), i = -1;
-  for (var v of x)
+  fm = fm || IDENTITY;
+  const a = new Map<V|K, V>(); let i = -1;
+  for (const v of x)
     a.set(fm(v, ++i, x), v);
   return a;
 }
@@ -234,15 +234,15 @@ export function fromValues<V, K=V>(x: Iterable<V>, fm: IterableMapFunction<V, V|
  * @returns x=y: 0, otherwise: -ve/+ve
  */
 export function compare<K, V, W=V>(x: Map<K, V>, y: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): number {
-  var fc = fc || COMPARE;
-  var fm = fm || IDENTITY;
-  var ks = unionKeys(x, y);
-  for (var k of ks) {
+  fc = fc || COMPARE;
+  fm = fm || IDENTITY;
+  const ks = unionKeys(x, y);
+  for (const k of ks) {
     if (!x.has(k)) return -1;
     if (!y.has(k)) return  1;
-    var vx = fm(x.get(k), k, x);
-    var vy = fm(y.get(k), k, y);
-    var c  = fc(vx, vy);
+    const vx = fm(x.get(k) as V, k, x);
+    const vy = fm(y.get(k) as V, k, y);
+    const c  = fc(vx, vy);
     if (c!==0) return c;
   }
   return 0;
@@ -299,7 +299,7 @@ export function isEmpty<K, V>(x: Map<K, V>): boolean {
  * @param k key
  * @returns x[k]
  */
-export function get<K, V>(x: Map<K, V>, k: K): V {
+export function get<K, V>(x: Map<K, V>, k: K): V | undefined {
   return x.get(k);
 }
 
@@ -310,7 +310,7 @@ export function get<K, V>(x: Map<K, V>, k: K): V {
  * @param ks keys
  * @returns [x[k₀], x[k₁], ...] | [k₀, k₁, ...] = ks
  */
-export function getAll<K, V>(x: Map<K, V>, ks: K[]): V[] {
+export function getAll<K, V>(x: Map<K, V>, ks: K[]): (V | undefined)[] {
   return ks.map(k => x.get(k));
 }
 
@@ -321,10 +321,11 @@ export function getAll<K, V>(x: Map<K, V>, ks: K[]): V[] {
  * @param p path
  * @returns x[k₀][k₁][...] | [k₀, k₁, ...] = p
  */
-export function getPath<K>(x: Map<K, any>, p: K[]): any {
-  for (var k of p)
-    x = is(x)? x.get(k) : undefined;
-  return x;
+export function getPath<K>(x: Map<K, unknown>, p: K[]): unknown {
+  let xany: unknown = x;
+  for (const k of p)
+    xany = is(xany)? xany.get(k) : undefined;
+  return xany;
 }
 
 
@@ -334,10 +335,11 @@ export function getPath<K>(x: Map<K, any>, p: K[]): any {
  * @param p path
  * @returns x[k₀][k₁][...] exists? | [k₀, k₁, ...] = p
  */
-export function hasPath<K>(x: Map<K, any>, p: K[]): boolean {
-  for (var k of p) {
-    if (!is(x)) return false;
-    x = x.get(k);
+export function hasPath<K>(x: Map<K, unknown>, p: K[]): boolean {
+  let xany: unknown = x;
+  for (const k of p) {
+    if (!is(xany)) return false;
+    xany = xany.get(k);
   }
   return true;
 }
@@ -374,8 +376,8 @@ export function set$<K, V>(x: Map<K, V>, k: K, v: V): Map<K, V> {
  * @param v value
  * @returns x | x[k₀][k₁][...] = v; [k₀, k₁, ...] = p
  */
-export function setPath$<K>(x: Map<K, any>, p: K[], v: any): Map<K, any> {
-  var y = getPath(x, p.slice(0, -1));
+export function setPath$<K>(x: Map<K, unknown>, p: K[], v: unknown): Map<K, unknown> {
+  const y = getPath(x, p.slice(0, -1));
   if (is(y)) y.set(arrayLast(p), v);
   return x;
 }
@@ -401,9 +403,9 @@ export function swap<K, V>(x: Entries<K, V>, k: K, l: K): Map<K, V> {
  * @returns x | x[i] ↔ x[j]
  */
 export function swap$<K, V>(x: Map<K, V>, k: K, l: K): Map<K, V> {
-  var t  = x.get(k);
-  x.set(k, x.get(l));
-  x.set(l, t);
+  const t  = x.get(k);
+  x.set(k, x.get(l) as V);
+  x.set(l, t as V);
   return x;
 }
 
@@ -437,8 +439,8 @@ export function remove$<K, V>(x: Map<K, V>, k: K): Map<K, V> {
  * @param p path
  * @returns x = x \\: [k₀][k₁][...] | [k₀, k₁, ...] = p
  */
-export function removePath$<K>(x: Map<K, any>, p: K[]): Map<K, any> {
-  var y = getPath(x, p.slice(0, -1));
+export function removePath$<K>(x: Map<K, unknown>, p: K[]): Map<K, unknown> {
+  const y = getPath(x, p.slice(0, -1));
   if (is(y)) y.delete(arrayLast(p));
   return x;
 }
@@ -456,8 +458,8 @@ export function removePath$<K>(x: Map<K, any>, p: K[]): Map<K, any> {
  * @returns Σtᵢ | tᵢ = 1 if ft(vᵢ) else 0; [kᵢ, vᵢ] ∈ x
  */
 export function count<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): number {
-  var a = 0;
-  for (var [k, v] of x)
+  let a = 0;
+  for (const [k, v] of x)
     if (ft(v, k, x)) ++a;
   return a;
 }
@@ -470,11 +472,11 @@ export function count<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): number {
  * @returns Map \{value ⇒ count\}
  */
 export function countAs<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W> | null=null): Map<V|W, number> {
-  var fm = fm || IDENTITY;
-  var a  = new Map();
-  for (var [k, v] of x) {
-    var w = fm(v, k, x);
-    var n = a.get(w) || 0;
+  fm = fm || IDENTITY;
+  const a  = new Map();
+  for (const [k, v] of x) {
+    const w = fm(v, k, x);
+    const n = a.get(w) || 0;
     a.set(w, n+1);
   }
   return a;
@@ -537,7 +539,7 @@ export function maxEntry<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | nul
  * @returns [min_value, max_value]
  */
 export function range<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): [V, V] {
-  var [a, b] = rangeEntries(x, fc, fm);
+  const [a, b] = rangeEntries(x, fc, fm);
   return [a[1], b[1]];
 }
 
@@ -550,18 +552,18 @@ export function range<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=n
  * @returns [min_entry, max_entry]
  */
 export function rangeEntries<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): [[K, V], [K, V]] {
-  var fc = fc || COMPARE;
-  var fm = fm || IDENTITY;
-  var mk: K, mu: V, mv: V|W;
-  var nk: K, nu: V, nv: V|W;
-  var i = 0;
-  for (var [k, u] of x) {
-    var v = fm(u, k, x);
-    if (i===0 || fc(v, mv)<0) { mk = k; mu = u; mv = v; }
-    if (i===0 || fc(v, nv)>0) { nk = k; nu = u; nv = v; }
+  fc = fc || COMPARE;
+  fm = fm || IDENTITY;
+  let mk: K | undefined, mu: V | undefined, mv: V|W | undefined;
+  let nk: K | undefined, nu: V | undefined, nv: V|W | undefined;
+  let i = 0;
+  for (const [k, u] of x) {
+    const v = fm(u, k, x);
+    if (i===0 || fc(v, mv as V|W)<0) { mk = k; mu = u; mv = v; }
+    if (i===0 || fc(v, nv as V|W)>0) { nk = k; nu = u; nv = v; }
     ++i;
   }
-  return [[mk, mu], [nk, nu]];
+  return [[mk as K, mu as V], [nk as K, nu as V]];
 }
 
 
@@ -576,8 +578,8 @@ export function rangeEntries<K, V, W=V>(x: Map<K, V>, fc: CompareFunction<V|W> |
  * @param ed default entry
  * @returns [k₀, v₀] if x ≠ Φ else ed | [k₀, v₀] ∈ x
  */
-export function head<K, V>(x: Entries<K, V>, ed: [K, V]=[] as any): [K, V] {
-  for (var e of x)
+export function head<K, V>(x: Entries<K, V>, ed: [K | undefined, V | undefined]=[undefined, undefined]): [K | undefined, V | undefined] {
+  for (const e of x)
     return e;
   return ed;
 }
@@ -600,8 +602,8 @@ export function tail<K, V>(x: Map<K, V>): Map<K, V> {
  * @returns \{[k₀, v₀], [k₁, v₁], ...\} | [kᵢ, vᵢ] ∈ x and |\{[k₀, v₀], [k₁, v₁], ...\}| ≤ n
  */
 export function take<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
-  var a = new Map(), i = -1;
-  for (var [k, v] of x) {
+  const a = new Map(); let i = -1;
+  for (const [k, v] of x) {
     if (++i>=n) break;
     a.set(k, v);
   }
@@ -616,8 +618,8 @@ export function take<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
  * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | [kᵢ, vᵢ] ∈ x and |\{[k₀, v₀], [k₁, v₁], ...\}| ≤ n
  */
 export function take$<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
-  var i = -1;
-  for (var k of x.keys())
+  let i = -1;
+  for (const k of x.keys())
     if (++i>=n) x.delete(k);
   return x;
 }
@@ -630,8 +632,8 @@ export function take$<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
  * @returns \{[kₙ, vₙ], [kₙ₊₁, vₙ₊₁], ...\} | [kᵢ, vᵢ] ∈ x and |\{[kₙ, vₙ], [kₙ₊₁, vₙ₊₁], ...\}| ≤ max(|x| - n, 0)
  */
 export function drop<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
-  var a = new Map(), i = -1;
-  for (var [k, v] of x)
+  const a = new Map(); let i = -1;
+  for (const [k, v] of x)
     if (++i>=n) a.set(k, v);
   return a;
 }
@@ -644,8 +646,8 @@ export function drop<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
  * @returns x = \{[kₙ, vₙ], [kₙ₊₁, vₙ₊₁], ...\} | [kᵢ, vᵢ] ∈ x and |\{[kₙ, vₙ], [kₙ₊₁, vₙ₊₁], ...\}| ≤ max(|x| - n, 0)
  */
 export function drop$<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
-  var i = -1;
-  for (var k of x.keys()) {
+  let i = -1;
+  for (const k of x.keys()) {
     if (++i>=n) break;
     x.delete(k);
   }
@@ -665,7 +667,7 @@ export function drop$<K, V>(x: Map<K, V>, n: number=1): Map<K, V> {
  * @returns entries selected by bit from 0..2^|x| if n<0; only of length n otherwise
  */
 export function* subsets<K, V>(x: Map<K, V>, n: number=-1): IterableIterator<Map<K, V>> {
-  for (var ks of arraySubsequences([...x.keys()], n))
+  for (const ks of arraySubsequences([...x.keys()], n))
     yield filterAt(x, ks);
 }
 
@@ -702,8 +704,8 @@ export {randomEntry as entry};
  * @returns \{[kᵢ, vᵢ], [kⱼ, vⱼ], ...\} | [kᵢ, vᵢ], [kⱼ, vⱼ], ... ∈ x; |\{[kᵢ, vᵢ], [kⱼ, vⱼ], ...\}| = |x| if n<0 else n
  */
 export function randomSubset<K, V>(x: Map<K, V>, n: number=-1, fr: ReadFunction<number> | null=Math.random): Map<K, V> {
-  var ks = arrayRandomSubsequence([...x.keys()], n, fr);
-  return filterAt(x, ks);
+  const ks = arrayRandomSubsequence([...x.keys()], n, fr);
+  return filterAt(x, ks as K[]);
 }
 export {randomSubset as subset};
 
@@ -747,10 +749,10 @@ export function hasValue<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunction<V|W>
  * @returns [k, v] ∈ x? | [k, v] = e
  */
 export function hasEntry<K, V, W=V>(x: Map<K, V>, e: [K, V], fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): boolean {
-  var fc = fc || COMPARE;
-  var fm = fm || IDENTITY;
-  var [k, v] = e;
-  return x.has(k) && fc(fm(x.get(k), k, x), v)===0;
+  fc = fc || COMPARE;
+  fm = fm || IDENTITY;
+  const [k, v] = e;
+  return x.has(k) && fc(fm(x.get(k) as V, k, x), v)===0;
 }
 
 
@@ -763,12 +765,12 @@ export function hasEntry<K, V, W=V>(x: Map<K, V>, e: [K, V], fc: CompareFunction
  * @returns y ⊆ x?
  */
 export function hasSubset<K, V, W=V>(x: Map<K, V>, y: Map<K, V>, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): boolean {
-  var fc = fc || COMPARE;
-  var fm = fm || IDENTITY;
-  for (var [k, v] of y) {
+  fc = fc || COMPARE;
+  fm = fm || IDENTITY;
+  for (const [k, v] of y) {
     if (!x.has(k)) return false;
-    var wx = fm(x.get(k), k, x);
-    var wy = fm(v, k, y);
+    const wx = fm(x.get(k) as V, k, x);
+    const wy = fm(v, k, y);
     if (fc(wx, wy)!==0) return false;
   }
   return true;
@@ -781,8 +783,8 @@ export function hasSubset<K, V, W=V>(x: Map<K, V>, y: Map<K, V>, fc: CompareFunc
  * @param ft test function (v, k, x)
  * @returns first v | ft(v) = true; [k, v] ∈ x
  */
-export function find<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): V {
-  for (var [k, v] of x)
+export function find<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): V | undefined {
+  for (const [k, v] of x)
     if (ft(v, k, x)) return v;
 }
 
@@ -794,8 +796,8 @@ export function find<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): V {
  * @returns [v₀, v₁, ...] | ft(vᵢ) = true; [kᵢ, vᵢ] ∈ x
  */
 export function findAll<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): V[] {
-  var a = [];
-  for (var [k, v] of x)
+  const a = [];
+  for (const [k, v] of x)
     if (ft(v, k, x)) a.push(v);
   return a;
 }
@@ -807,8 +809,8 @@ export function findAll<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): V[] {
  * @param ft test function (v, k, x)
  * @returns key of entry
  */
-export function search<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): K {
-  for (var [k, v] of x)
+export function search<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): K | undefined {
+  for (const [k, v] of x)
     if (ft(v, k, x)) return k;
 }
 
@@ -820,8 +822,8 @@ export function search<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): K {
  * @returns keys of entries
  */
 export function searchAll<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): K[] {
-  var a = [];
-  for (var [k, v] of x)
+  const a = [];
+  for (const [k, v] of x)
     if (ft(v, k, x)) a.push(k);
   return a;
 }
@@ -835,12 +837,12 @@ export function searchAll<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): K[] {
  * @param fm map function (v, k, x)
  * @returns key of value
  */
-export function searchValue<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): K {
-  var fc = fc || COMPARE;
-  var fm = fm || IDENTITY;
-  var w = fm(v, null, null);
-  for (var [k, u] of x) {
-    var wx = fm(u, k, x);
+export function searchValue<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): K | undefined {
+  fc = fc || COMPARE;
+  fm = fm || IDENTITY;
+  const w = fm(v, null as K, null);
+  for (const [k, u] of x) {
+    const wx = fm(u, k, x);
     if (fc(wx, w)===0) return k;
   }
 }
@@ -855,11 +857,11 @@ export function searchValue<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunction<V
  * @returns keys of value
  */
 export function searchValueAll<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunction<V|W> | null=null, fm: MapFunction<K, V, V|W> | null=null): K[] {
-  var fc = fc || COMPARE;
-  var fm = fm || IDENTITY;
-  var w  = fm(v, null, null), a = [];
-  for(var [k, u] of x) {
-    var wx = fm(u, k, x);
+  fc = fc || COMPARE;
+  fm = fm || IDENTITY;
+  const w  = fm(v, null as K, null), a = [];
+  for(const [k, u] of x) {
+    const wx = fm(u, k, x);
     if (fc(wx, w)===0) a.push(k);
   }
   return a;
@@ -877,7 +879,7 @@ export function searchValueAll<K, V, W=V>(x: Map<K, V>, v: V, fc: CompareFunctio
  * @param fp process function (v, k, x)
  */
 export function forEach<K, V>(x: Map<K, V>, fp: ProcessFunction<K, V>): void {
-  for (var [k, v] of x)
+  for (const [k, v] of x)
     fp(v, k, x);
 }
 
@@ -889,7 +891,7 @@ export function forEach<K, V>(x: Map<K, V>, fp: ProcessFunction<K, V>): void {
  * @returns true if ft(vᵢ) = true for some [kᵢ, vᵢ] ∈ x
  */
 export function some<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): boolean {
-  for (var [k, v] of x)
+  for (const [k, v] of x)
     if (ft(v, k, x)) return true;
   return false;
 }
@@ -902,7 +904,7 @@ export function some<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): boolean {
  * @returns true if ft(vᵢ) = true for all [kᵢ, vᵢ] ∈ x
  */
 export function every<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): boolean {
-  for (var [k, v] of x)
+  for (const [k, v] of x)
     if (!ft(v, k, x)) return false;
   return true;
 }
@@ -915,8 +917,8 @@ export function every<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): boolean {
  * @returns \{[k₀, fm(v₀)], [k₁, fm(v₁)], ...\} | [kᵢ, vᵢ] ∈ x
  */
 export function map<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W>): Map<K, V|W> {
-  var a = new Map();
-  for (var [k, v] of x)
+  const a = new Map();
+  for (const [k, v] of x)
     a.set(k, fm(v, k, x));
   return a;
 }
@@ -929,7 +931,7 @@ export function map<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W>): Map<K,
  * @returns x = \{[k₀, fm(v₀)], [k₁, fm(v₁)], ...\} | [kᵢ, vᵢ] ∈ x
  */
 export function map$<K, V>(x: Map<K, V>, fm: MapFunction<K, V, V>): Map<K, V> {
-  for (var [k, v] of x)
+  for (const [k, v] of x)
     x.set(k, fm(v, k, x));
   return x;
 }
@@ -943,12 +945,12 @@ export function map$<K, V>(x: Map<K, V>, fm: MapFunction<K, V, V>): Map<K, V> {
  * @returns fr(fr(acc, v₀), v₁)... | fr(acc, v₀) = v₀ if acc not given
  */
 export function reduce<K, V, W=V>(x: Map<K, V>, fr: ReduceFunction<K, V, V|W>, acc?: V|W): V|W {
-  var init = arguments.length <= 2;
-  for (var [k, v] of x) {
+  let init = arguments.length <= 2;
+  for (const [k, v] of x) {
     if (init) { acc = v; init = false; }
-    else acc = fr(acc, v, k, x);
+    else acc = fr(acc as V|W, v, k, x);
   }
-  return acc;
+  return acc as V|W;
 }
 
 
@@ -959,8 +961,8 @@ export function reduce<K, V, W=V>(x: Map<K, V>, fr: ReduceFunction<K, V, V|W>, a
  * @returns \{[k₀, v₀], [k₁, v₁], ...\} | ft(vᵢ) = true; [kᵢ, vᵢ] ∈ x
  */
 export function filter<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
-  var a = new Map();
-  for (var [k, v] of x)
+  const a = new Map();
+  for (const [k, v] of x)
     if (ft(v, k, x)) a.set(k, v);
   return a;
 }
@@ -973,7 +975,7 @@ export function filter<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
  * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | ft(vᵢ) = true; [kᵢ, vᵢ] ∈ x
  */
 export function filter$<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
-  for (var [k, v] of x)
+  for (const [k, v] of x)
     if (!ft(v, k, x)) x.delete(k);
   return x;
 }
@@ -986,8 +988,8 @@ export function filter$<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
  * @returns \{[k₀, v₀], [k₁, v₁], ...\} | kᵢ ∈ ks; [kᵢ, vᵢ] ∈ x
  */
 export function filterAt<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
-  var a = new Map();
-  for (var k of ks)
+  const a = new Map();
+  for (const k of ks)
     a.set(k, x.get(k));
   return a;
 }
@@ -1000,7 +1002,7 @@ export function filterAt<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
  * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | kᵢ ∈ ks; [kᵢ, vᵢ] ∈ x
  */
 export function filterAt$<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
-  for (var k of x.keys())
+  for (const k of x.keys())
     if (!ks.includes(k)) x.delete(k);
   return x;
 }
@@ -1013,8 +1015,8 @@ export function filterAt$<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
  * @returns \{[k₀, v₀], [k₁, v₁], ...\} | ft(vᵢ) = false; [kᵢ, vᵢ] ∈ x
  */
 export function reject<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
-  var a = new Map();
-  for (var [k, v] of x)
+  const a = new Map();
+  for (const [k, v] of x)
     if (!ft(v, k, x)) a.set(k, v);
   return a;
 }
@@ -1027,7 +1029,7 @@ export function reject<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
  * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | ft(vᵢ) = false; [kᵢ, vᵢ] ∈ x
  */
 export function reject$<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): Map<K, V> {
-  for (var [k, v] of x)
+  for (const [k, v] of x)
     if (ft(v, k, x)) x.delete(k);
   return x;
 }
@@ -1051,7 +1053,7 @@ export function rejectAt<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
  * @returns x = \{[k₀, v₀], [k₁, v₁], ...\} | kᵢ ∉ ks; [kᵢ, vᵢ] ∈ x
  */
 export function rejectAt$<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
-  for (var k of ks)
+  for (const k of ks)
     x.delete(k);
   return x;
 }
@@ -1065,16 +1067,16 @@ export function rejectAt$<K, V>(x: Map<K, V>, ks: K[]): Map<K, V> {
  * @param ft test function for flatten (v, k, x) [is]
  * @returns flat map
  */
-export function flat<K>(x: Map<K, any>, n: number=-1, fm: MapFunction<K, any, any> | null=null, ft: TestFunction<K, any> | null=null): Map<K, any> {
-  var fm = fm || IDENTITY;
-  var ft = ft || is;
+export function flat<K>(x: Map<K, unknown>, n: number=-1, fm: MapFunction<K, unknown, unknown> | null=null, ft: TestFunction<K, unknown> | null=null): Map<K, unknown> {
+  fm = fm || IDENTITY;
+  ft = ft || is;
   return flatTo$(new Map(), x, n, fm, ft);
 }
 
-function flatTo$<K>(a: Map<K, any>, x: Map<K, any>, n: number, fm: MapFunction<K, any, any>, ft: TestFunction<K, any>): Map<K, any> {
-  for (var [k, v] of x) {
-    var w = fm(v, k, x);
-    if (n!==0 && ft(w, k, x)) flatTo$(a, w, n-1, fm, ft);
+function flatTo$<K>(a: Map<K, unknown>, x: Map<K, unknown>, n: number, fm: MapFunction<K, unknown, unknown>, ft: TestFunction<K, unknown>): Map<K, unknown> {
+  for (const [k, v] of x) {
+    const w = fm(v, k, x);
+    if (n!==0 && ft(w, k, x)) flatTo$(a, w as Map<K, unknown>, n-1, fm, ft);
     else a.set(k, w);
   }
   return a;
@@ -1088,13 +1090,13 @@ function flatTo$<K>(a: Map<K, any>, x: Map<K, any>, n: number, fm: MapFunction<K
  * @param ft test function for flatten (v, k, x) [is]
  * @returns flat map
  */
-export function flatMap<K>(x: Map<K, any>, fm: MapFunction<K, any, any> | null=null, ft: TestFunction<K, any> | null=null): Map<K, any> {
-  var fm = fm || IDENTITY;
-  var ft = ft || is;
-  var a  = new Map();
-  for (var [k, v] of x) {
-    var w = fm(v, k, x);
-    if (ft(w, k, x)) concat$(a, w);
+export function flatMap<K>(x: Map<K, unknown>, fm: MapFunction<K, unknown, unknown> | null=null, ft: TestFunction<K, unknown> | null=null): Map<K, unknown> {
+  fm = fm || IDENTITY;
+  ft = ft || is;
+  const a  = new Map();
+  for (const [k, v] of x) {
+    const w = fm(v, k, x);
+    if (ft(w, k, x)) concat$(a, w as Map<K, unknown>);
     else a.set(k, w);
   }
   return a;
@@ -1109,15 +1111,15 @@ export function flatMap<K>(x: Map<K, any>, fm: MapFunction<K, any, any> | null=n
  * @param vd default value
  * @returns [fm([x₀[k₀], x₁[k₀], ...]), fm([x₀[k₁], x₁[k₁], ...]), ...]
  */
-export function zip<K, V, W=V>(xs: Map<K, V>[], fm: MapFunction<K, V[], V[]|W> | null=null, fe: EndFunction=null, vd?: V): Map<K, V[]|W> {
-  var fm = fm || IDENTITY;
-  var fe = fe || arraySome as EndFunction;
-  var ks = unionKeys(...xs), a = new Map();
-  for (var k of ks) {
-    var ds = xs.map(x => !x.has(k));
+export function zip<K, V, W=V>(xs: Map<K, V>[], fm: MapFunction<K, V[], V[]|W> | null=null, fe: EndFunction | null=null, vd?: V): Map<K, V[]|W> {
+  fm = fm || IDENTITY;
+  fe = fe || arraySome as EndFunction;
+  const ks = unionKeys(...xs), a = new Map();
+  for (const k of ks) {
+    const ds = xs.map(x => !x.has(k));
     if (fe(ds)) break;
-    var vs = xs.map(x => !x.has(k)? vd : x.get(k));
-    a.set(k, fm(vs, k, null));
+    const vs = xs.map(x => !x.has(k)? vd : x.get(k));
+    a.set(k, fm(vs as V[], k, null));
   }
   return a;
 }
@@ -1135,9 +1137,9 @@ export function zip<K, V, W=V>(xs: Map<K, V>[], fm: MapFunction<K, V[], V[]|W> |
  * @returns [satisfies, doesnt]
  */
 export function partition<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): [Map<K, V>, Map<K, V>] {
-  var t = new Map();
-  var f = new Map();
-  for (var [k, v] of x) {
+  const t = new Map();
+  const f = new Map();
+  for (const [k, v] of x) {
     if (ft(v, k, x)) t.set(k, v);
     else f.set(k, v);
   }
@@ -1152,10 +1154,10 @@ export function partition<K, V>(x: Map<K, V>, ft: TestFunction<K, V>): [Map<K, V
  * @returns Map \{key ⇒ values\}
  */
 export function partitionAs<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W>): Map<V|W, Map<K, V>> {
-  var fm = fm || IDENTITY;
-  var a  = new Map();
-  for (var [k, v] of x) {
-    var w = fm(v, k, x);
+  fm = fm || IDENTITY;
+  const a  = new Map();
+  for (const [k, v] of x) {
+    const w = fm(v, k, x);
     if (!a.has(w)) a.set(w, new Map());
     a.get(w).set(k, v);
   }
@@ -1171,8 +1173,9 @@ export function partitionAs<K, V, W=V>(x: Map<K, V>, fm: MapFunction<K, V, V|W>)
  * @returns [x[0..n], x[s..s+n], x[2s..2s+n], ...]
  */
 export function chunk<K, V>(x: Map<K, V>, n: number=1, s: number=n): Map<K, V>[] {
-  var ks = [...x.keys()], a = [];
-  for (var i=0, I=ks.length; i<I; i+=s)
+  const ks = [...x.keys()], a = [];
+  const I  = ks.length;
+  for (let i=0; i<I; i+=s)
     a.push(filterAt(x, ks.slice(i, i+n)));
   return a;
 }
@@ -1200,8 +1203,8 @@ export function concat<K, V>(...xs: Entries<K, V>[]): Map<K, V> {
  * @returns x = x ∪ y₀ ∪ y₁ ∪ ... | [y₀, y₁, ...] = ys
  */
 export function concat$<K, V>(x: Map<K, V>, ...ys: Entries<K, V>[]): Map<K, V> {
-  for (var y of ys) {
-    for (var [k, v] of y)
+  for (const y of ys) {
+    for (const [k, v] of y)
       x.set(k, v);
   }
   return x;
@@ -1216,8 +1219,8 @@ export function concat$<K, V>(x: Map<K, V>, ...ys: Entries<K, V>[]): Map<K, V> {
  * @returns "$\{k₀\}=$\{v₀\},$\{k₁\}=$\{v₁\}..." | [kᵢ, vᵢ] ∈ x
  */
 export function join<K, V>(x: Entries<K, V>, sep: string=",", asc: string="="): string {
-  var a = "";
-  for (var [k, v] of x)
+  let a = "";
+  for (const [k, v] of x)
     a += k + asc + v + sep;
   return a.slice(0, -sep.length);
 }
@@ -1235,7 +1238,7 @@ export function join<K, V>(x: Entries<K, V>, sep: string=",", asc: string="="): 
  * @returns x ∩ y = Φ?
  */
 export function isDisjoint<K, V>(x: Map<K, V>, y: Entries<K, V>): boolean {
-  for (var [k] of y)
+  for (const [k] of y)
     if (x.has(k)) return false;
   return true;
 }
@@ -1247,9 +1250,9 @@ export function isDisjoint<K, V>(x: Map<K, V>, y: Entries<K, V>): boolean {
  * @returns [k₀, k₁, ...] | [kᵢ, vᵢ] ∈ x₀ ∪ x₁, ...; [x₀, x₁, ...] = xs
  */
 export function unionKeys<K, V>(...xs: Entries<K, V>[]): Set<K> {
-  var a = new Set<K>();
-  for (var x of xs) {
-    for (var [k] of x)
+  const a = new Set<K>();
+  for (const x of xs) {
+    for (const [k] of x)
       a.add(k);
   }
   return a;
@@ -1277,10 +1280,10 @@ export function union<K, V>(x: Entries<K, V>, y: Entries<K, V>, fc: CombineFunct
  * @returns x = x ∪ y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x or [kᵢ, vᵢ] ∈ y\}
  */
 export function union$<K, V>(x: Map<K, V>, y: Entries<K, V>, fc: CombineFunction<V> | null=null): Map<K, V> {
-  var fc = fc || IDENTITY;
-  for (var [k, v] of y) {
+  fc = fc || IDENTITY;
+  for (const [k, v] of y) {
     if (!x.has(k)) x.set(k, v);
-    else x.set(k, fc(x.get(k), v));
+    else x.set(k, fc(x.get(k) as V, v));
   }
   return x;
 }
@@ -1292,11 +1295,11 @@ export function union$<K, V>(x: Map<K, V>, y: Entries<K, V>, fc: CombineFunction
  * @returns [k₀, k₁, ...] | [kᵢ, vᵢ] ∈ x₀ ∩ x₁, ...; [x₀, x₁, ...] = xs
  */
 export function intersectionKeys<K, V>(...xs: Map<K, V>[]): Set<K> {
-  var a = new Set<K>();
+  const a = new Set<K>();
   if (xs.length===0) return a;
-  var x = xs[0], ys = xs.slice(1);
-  LOOPX: for (var k of x.keys()) {
-    for (var y of ys)
+  const x = xs[0], ys = xs.slice(1);
+  LOOPX: for (const k of x.keys()) {
+    for (const y of ys)
       if (!y.has(k)) continue LOOPX;
     a.add(k);
   }
@@ -1312,10 +1315,10 @@ export function intersectionKeys<K, V>(...xs: Map<K, V>[]): Set<K> {
  * @returns x ∩ y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x and [kᵢ, vᵢ] ∈ y\}
  */
 export function intersection<K, V>(x: Map<K, V>, y: Entries<K, V>, fc: CombineFunction<V> | null=null): Map<K, V> {
-  var fc = fc || IDENTITY;
-  var a  = new Map();
-  for (var [k, v] of y)
-    if (x.has(k)) a.set(k, fc(x.get(k), v));
+  fc = fc || IDENTITY;
+  const a  = new Map();
+  for (const [k, v] of y)
+    if (x.has(k)) a.set(k, fc(x.get(k) as V, v));
   return a;
 }
 
@@ -1328,10 +1331,10 @@ export function intersection<K, V>(x: Map<K, V>, y: Entries<K, V>, fc: CombineFu
  * @returns x = x ∩ y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x and [kᵢ, vᵢ] ∈ y\}
  */
 export function intersection$<K, V>(x: Map<K, V>, y: Map<K, V>, fc: CombineFunction<V> | null=null): Map<K, V> {
-  var fc = fc || IDENTITY, ks = [];
-  for (var [k, u] of [...x]) {
+  fc = fc || IDENTITY; const ks: K[] = [];
+  for (const [k, u] of [...x]) {
     if (!y.has(k)) ks.push(k);
-    x.set(k, fc(u, y.get(k)));
+    x.set(k, fc(u, y.get(k) as V));
   }
   return rejectAt$(x, ks);
 }
@@ -1355,7 +1358,7 @@ export function difference<K, V>(x: Entries<K, V>, y: Entries<K, V>): Map<K, V> 
  * @returns x = x - y = \{[kᵢ, vᵢ] | [kᵢ, vᵢ] ∈ x, [kᵢ, *] ∉ y\}
  */
 export function difference$<K, V>(x: Map<K, V>, y: Entries<K, V>): Map<K, V> {
-  for (var [k] of y)
+  for (const [k] of y)
     x.delete(k);
   return x;
 }
@@ -1379,7 +1382,7 @@ export function symmetricDifference<K, V>(x: Entries<K, V>, y: Entries<K, V>): M
  * @returns x = x-y ∪ y-x
  */
 export function symmetricDifference$<K, V>(x: Map<K, V>, y: Entries<K, V>): Map<K, V> {
-  for (var [k, v] of y) {
+  for (const [k, v] of y) {
     if (x.has(k)) x.delete(k);
     else x.set(k, v);
   }
@@ -1394,20 +1397,21 @@ export function symmetricDifference$<K, V>(x: Map<K, V>, y: Entries<K, V>): Map<
  * @returns x₀ × x₁ × ... = \{\{[k₀, v₀], [k₁, v₁], ...\} | [k₀, v₀] ∈ x₀, [k₁, v₁] ∈ x₁, ...]\}
  */
 export function* cartesianProduct<K, V, W=Map<K, V>>(xs: Map<K, V>[], fm: MapFunction<number, Map<K, V>, Map<K, V>|W> | null=null): IterableIterator<Map<K, V>|W> {
-  var fm = fm || IDENTITY;
-  var XS = xs.length;
-  var kx = xs.map(x => [...x.keys()]);
-  var ls = kx.map(ks => ks.length);
-  var is = kx.map(ks => 0);
-  for (var j=0;; ++j) {
-    var a = new Map<K, V>();
-    for (var n=0; n<XS; ++n) {
-      var i  = is[n], x = xs[n];
-      var ks = kx[n], k = ks[i];
-      a.set(k, x.get(k));
+  fm = fm || IDENTITY;
+  const XS = xs.length;
+  const kx = xs.map(x => [...x.keys()]);
+  const ls = kx.map(ks => ks.length);
+  const is = kx.map(_ks => 0);
+  for (let j=0;; ++j) {
+    const a = new Map<K, V>();
+    for (let n=0; n<XS; ++n) {
+      const i  = is[n], x = xs[n];
+      const ks = kx[n], k = ks[i];
+      a.set(k, x.get(k) as V);
     }
     yield fm(a, j, null);
-    for (var r=XS-1; r>=0; --r) {
+    let r = XS-1;
+    for (; r>=0; --r) {
       if (++is[r] < ls[r]) break;
       is[r] = 0;
     }

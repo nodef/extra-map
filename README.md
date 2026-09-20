@@ -1,9 +1,9 @@
 A group of functions for working with Maps.<br>
-📦 [Node.js](https://www.npmjs.com/package/extra-map),
-🌐 [Web](https://www.npmjs.com/package/extra-map.web),
-📜 [Files](https://unpkg.com/extra-map/),
-📰 [Docs](https://nodef.github.io/extra-map/),
-📘 [Wiki](https://github.com/nodef/extra-map/wiki/).
+
+▌
+📦 [JSR](https://jsr.io/@nodef/extra-map),
+📦 [NPM](https://www.npmjs.com/package/extra-map),
+📰 [Docs](https://jsr.io/@nodef/extra-map/doc).
 
 A [Map] is a collection of key-value pairs, with unique keys. This package
 includes common set functions related to querying **about** map, **generating**
@@ -18,37 +18,28 @@ are borrowed from Haskell, Python, Java, Processing. Methods like
 `swap()` are pure and do not modify the map itself, while methods like
 `swap$()` *do modify (update)* the map itself.
 
-This package is available in *Node.js* and *Web* formats. The web format
-is exposed as `extra_set` standalone variable and can be loaded from
-[jsDelivr CDN].
-
-> Stability: [Experimental](https://www.youtube.com/watch?v=L1j93RnIxEo).
-
 [Map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
-[jsDelivr CDN]: https://cdn.jsdelivr.net/npm/extra-map.web/index.js
 
 <br>
 
 ```javascript
-const map = require('extra-map');
-// import * as map from "extra-map";
-// import * as map from "https://unpkg.com/extra-map/index.mjs"; (deno)
+import * as xmap from "jsr:@nodef/extra-map";
 
 var x = new Map([["a", 1], ["b", 2], ["c", 3], ["d", 4]]);
-map.swap(x, "a", "b");
+xmap.swap(x, "a", "b");
 // → Map(4) { "a" => 2, "b" => 1, "c" => 3, "d" => 4 }
 
 var x = new Map([["a", 1],  ["b", 2],  ["c", 3], ["d", 4]]);
 var y = new Map([["b", 20], ["c", 30], ["e", 50]]);
-map.intersection(x, y);
+xmap.intersection(x, y);
 // → Map(2) { "b" => 2, "c" => 3 }
 
 var x = new Map([["a", 1], ["b", 2], ["c", 3], ["d", -2]]);
-map.searchAll(x, v => Math.abs(v) === 2);
+xmap.searchAll(x, v => Math.abs(v) === 2);
 // → [ "b", "d" ]              ^                   ^
 
 var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
-[...map.subsets(x)];
+[...xmap.subsets(x)];
 // → [
 // →   Map(0) {},
 // →   Map(1) { "a" => 1 },
@@ -174,100 +165,96 @@ var x = new Map([["a", 1], ["b", 2], ["c", 3]]);
 <br>
 
 
-[![](https://img.youtube.com/vi/dMxIjGjMJz0/maxresdefault.jpg)](https://www.youtube.com/watch?v=dMxIjGjMJz0)
+[![](https://raw.githubusercontent.com/qb40/designs/gh-pages/0/image/11.png)](https://wolfram77.github.io)<br>
 [![ORG](https://img.shields.io/badge/org-nodef-green?logo=Org)](https://nodef.github.io)
-[![DOI](https://zenodo.org/badge/133659342.svg)](https://zenodo.org/badge/latestdoi/133659342)
-[![Coverage Status](https://coveralls.io/repos/github/nodef/extra-map/badge.svg?branch=master)](https://coveralls.io/github/nodef/extra-map?branch=master)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/6d1d66699747ff804674/test_coverage)](https://codeclimate.com/github/nodef/extra-map/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/6d1d66699747ff804674/maintainability)](https://codeclimate.com/github/nodef/extra-map/maintainability)
 ![](https://ga-beacon.deno.dev/G-RC63DPBH3P:SH3Eq-NoQ9mwgYeHWxu7cw/github.com/nodef/extra-map)
 
 
-[is]: https://github.com/nodef/extra-map/wiki/is
-[keys]: https://github.com/nodef/extra-map/wiki/keys
-[values]: https://github.com/nodef/extra-map/wiki/values
-[entries]: https://github.com/nodef/extra-map/wiki/entries
-[from]: https://github.com/nodef/extra-map/wiki/from
-[from$]: https://github.com/nodef/extra-map/wiki/from$
-[fromLists]: https://github.com/nodef/extra-map/wiki/fromLists
-[fromKeys]: https://github.com/nodef/extra-map/wiki/fromKeys
-[fromValues]: https://github.com/nodef/extra-map/wiki/fromValues
-[compare]: https://github.com/nodef/extra-map/wiki/compare
-[isEqual]: https://github.com/nodef/extra-map/wiki/isEqual
-[size]: https://github.com/nodef/extra-map/wiki/size
-[isEmpty]: https://github.com/nodef/extra-map/wiki/isEmpty
-[get]: https://github.com/nodef/extra-map/wiki/get
-[getAll]: https://github.com/nodef/extra-map/wiki/getAll
-[getPath]: https://github.com/nodef/extra-map/wiki/getPath
-[hasPath]: https://github.com/nodef/extra-map/wiki/hasPath
-[set]: https://github.com/nodef/extra-map/wiki/set
-[set$]: https://github.com/nodef/extra-map/wiki/set$
-[setPath$]: https://github.com/nodef/extra-map/wiki/setPath$
-[swap]: https://github.com/nodef/extra-map/wiki/swap
-[swap$]: https://github.com/nodef/extra-map/wiki/swap$
-[remove]: https://github.com/nodef/extra-map/wiki/remove
-[remove$]: https://github.com/nodef/extra-map/wiki/remove$
-[removePath$]: https://github.com/nodef/extra-map/wiki/removePath$
-[count]: https://github.com/nodef/extra-map/wiki/count
-[countAs]: https://github.com/nodef/extra-map/wiki/countAs
-[min]: https://github.com/nodef/extra-map/wiki/min
-[minEntry]: https://github.com/nodef/extra-map/wiki/minEntry
-[max]: https://github.com/nodef/extra-map/wiki/max
-[maxEntry]: https://github.com/nodef/extra-map/wiki/maxEntry
-[range]: https://github.com/nodef/extra-map/wiki/range
-[rangeEntries]: https://github.com/nodef/extra-map/wiki/rangeEntries
-[head]: https://github.com/nodef/extra-map/wiki/head
-[tail]: https://github.com/nodef/extra-map/wiki/tail
-[take]: https://github.com/nodef/extra-map/wiki/take
-[take$]: https://github.com/nodef/extra-map/wiki/take$
-[drop]: https://github.com/nodef/extra-map/wiki/drop
-[drop$]: https://github.com/nodef/extra-map/wiki/drop$
-[subsets]: https://github.com/nodef/extra-map/wiki/subsets
-[randomKey]: https://github.com/nodef/extra-map/wiki/randomKey
-[randomEntry]: https://github.com/nodef/extra-map/wiki/randomEntry
-[randomSubset]: https://github.com/nodef/extra-map/wiki/randomSubset
-[has]: https://github.com/nodef/extra-map/wiki/has
-[hasValue]: https://github.com/nodef/extra-map/wiki/hasValue
-[hasEntry]: https://github.com/nodef/extra-map/wiki/hasEntry
-[hasSubset]: https://github.com/nodef/extra-map/wiki/hasSubset
-[find]: https://github.com/nodef/extra-map/wiki/find
-[findAll]: https://github.com/nodef/extra-map/wiki/findAll
-[search]: https://github.com/nodef/extra-map/wiki/search
-[searchAll]: https://github.com/nodef/extra-map/wiki/searchAll
-[searchValue]: https://github.com/nodef/extra-map/wiki/searchValue
-[searchValueAll]: https://github.com/nodef/extra-map/wiki/searchValueAll
-[forEach]: https://github.com/nodef/extra-map/wiki/forEach
-[some]: https://github.com/nodef/extra-map/wiki/some
-[every]: https://github.com/nodef/extra-map/wiki/every
-[map]: https://github.com/nodef/extra-map/wiki/map
-[map$]: https://github.com/nodef/extra-map/wiki/map$
-[reduce]: https://github.com/nodef/extra-map/wiki/reduce
-[filter]: https://github.com/nodef/extra-map/wiki/filter
-[filter$]: https://github.com/nodef/extra-map/wiki/filter$
-[filterAt]: https://github.com/nodef/extra-map/wiki/filterAt
-[filterAt$]: https://github.com/nodef/extra-map/wiki/filterAt$
-[reject]: https://github.com/nodef/extra-map/wiki/reject
-[reject$]: https://github.com/nodef/extra-map/wiki/reject$
-[rejectAt]: https://github.com/nodef/extra-map/wiki/rejectAt
-[rejectAt$]: https://github.com/nodef/extra-map/wiki/rejectAt$
-[flat]: https://github.com/nodef/extra-map/wiki/flat
-[flatMap]: https://github.com/nodef/extra-map/wiki/flatMap
-[zip]: https://github.com/nodef/extra-map/wiki/zip
-[partition]: https://github.com/nodef/extra-map/wiki/partition
-[partitionAs]: https://github.com/nodef/extra-map/wiki/partitionAs
-[chunk]: https://github.com/nodef/extra-map/wiki/chunk
-[concat]: https://github.com/nodef/extra-map/wiki/concat
-[concat$]: https://github.com/nodef/extra-map/wiki/concat$
-[join]: https://github.com/nodef/extra-map/wiki/join
-[isDisjoint]: https://github.com/nodef/extra-map/wiki/isDisjoint
-[unionKeys]: https://github.com/nodef/extra-map/wiki/unionKeys
-[union]: https://github.com/nodef/extra-map/wiki/union
-[union$]: https://github.com/nodef/extra-map/wiki/union$
-[intersectionKeys]: https://github.com/nodef/extra-map/wiki/intersectionKeys
-[intersection]: https://github.com/nodef/extra-map/wiki/intersection
-[intersection$]: https://github.com/nodef/extra-map/wiki/intersection$
-[difference]: https://github.com/nodef/extra-map/wiki/difference
-[difference$]: https://github.com/nodef/extra-map/wiki/difference$
-[symmetricDifference]: https://github.com/nodef/extra-map/wiki/symmetricDifference
-[symmetricDifference$]: https://github.com/nodef/extra-map/wiki/symmetricDifference$
-[cartesianProduct]: https://github.com/nodef/extra-map/wiki/cartesianProduct
+[is]: https://jsr.io/@nodef/extra-map/doc/~/is
+[keys]: https://jsr.io/@nodef/extra-map/doc/~/keys
+[values]: https://jsr.io/@nodef/extra-map/doc/~/values
+[entries]: https://jsr.io/@nodef/extra-map/doc/~/entries
+[from]: https://jsr.io/@nodef/extra-map/doc/~/from
+[from$]: https://jsr.io/@nodef/extra-map/doc/~/from$
+[fromLists]: https://jsr.io/@nodef/extra-map/doc/~/fromLists
+[fromKeys]: https://jsr.io/@nodef/extra-map/doc/~/fromKeys
+[fromValues]: https://jsr.io/@nodef/extra-map/doc/~/fromValues
+[compare]: https://jsr.io/@nodef/extra-map/doc/~/compare
+[isEqual]: https://jsr.io/@nodef/extra-map/doc/~/isEqual
+[size]: https://jsr.io/@nodef/extra-map/doc/~/size
+[isEmpty]: https://jsr.io/@nodef/extra-map/doc/~/isEmpty
+[get]: https://jsr.io/@nodef/extra-map/doc/~/get
+[getAll]: https://jsr.io/@nodef/extra-map/doc/~/getAll
+[getPath]: https://jsr.io/@nodef/extra-map/doc/~/getPath
+[hasPath]: https://jsr.io/@nodef/extra-map/doc/~/hasPath
+[set]: https://jsr.io/@nodef/extra-map/doc/~/set
+[set$]: https://jsr.io/@nodef/extra-map/doc/~/set$
+[setPath$]: https://jsr.io/@nodef/extra-map/doc/~/setPath$
+[swap]: https://jsr.io/@nodef/extra-map/doc/~/swap
+[swap$]: https://jsr.io/@nodef/extra-map/doc/~/swap$
+[remove]: https://jsr.io/@nodef/extra-map/doc/~/remove
+[remove$]: https://jsr.io/@nodef/extra-map/doc/~/remove$
+[removePath$]: https://jsr.io/@nodef/extra-map/doc/~/removePath$
+[count]: https://jsr.io/@nodef/extra-map/doc/~/count
+[countAs]: https://jsr.io/@nodef/extra-map/doc/~/countAs
+[min]: https://jsr.io/@nodef/extra-map/doc/~/min
+[minEntry]: https://jsr.io/@nodef/extra-map/doc/~/minEntry
+[max]: https://jsr.io/@nodef/extra-map/doc/~/max
+[maxEntry]: https://jsr.io/@nodef/extra-map/doc/~/maxEntry
+[range]: https://jsr.io/@nodef/extra-map/doc/~/range
+[rangeEntries]: https://jsr.io/@nodef/extra-map/doc/~/rangeEntries
+[head]: https://jsr.io/@nodef/extra-map/doc/~/head
+[tail]: https://jsr.io/@nodef/extra-map/doc/~/tail
+[take]: https://jsr.io/@nodef/extra-map/doc/~/take
+[take$]: https://jsr.io/@nodef/extra-map/doc/~/take$
+[drop]: https://jsr.io/@nodef/extra-map/doc/~/drop
+[drop$]: https://jsr.io/@nodef/extra-map/doc/~/drop$
+[subsets]: https://jsr.io/@nodef/extra-map/doc/~/subsets
+[randomKey]: https://jsr.io/@nodef/extra-map/doc/~/randomKey
+[randomEntry]: https://jsr.io/@nodef/extra-map/doc/~/randomEntry
+[randomSubset]: https://jsr.io/@nodef/extra-map/doc/~/randomSubset
+[has]: https://jsr.io/@nodef/extra-map/doc/~/has
+[hasValue]: https://jsr.io/@nodef/extra-map/doc/~/hasValue
+[hasEntry]: https://jsr.io/@nodef/extra-map/doc/~/hasEntry
+[hasSubset]: https://jsr.io/@nodef/extra-map/doc/~/hasSubset
+[find]: https://jsr.io/@nodef/extra-map/doc/~/find
+[findAll]: https://jsr.io/@nodef/extra-map/doc/~/findAll
+[search]: https://jsr.io/@nodef/extra-map/doc/~/search
+[searchAll]: https://jsr.io/@nodef/extra-map/doc/~/searchAll
+[searchValue]: https://jsr.io/@nodef/extra-map/doc/~/searchValue
+[searchValueAll]: https://jsr.io/@nodef/extra-map/doc/~/searchValueAll
+[forEach]: https://jsr.io/@nodef/extra-map/doc/~/forEach
+[some]: https://jsr.io/@nodef/extra-map/doc/~/some
+[every]: https://jsr.io/@nodef/extra-map/doc/~/every
+[map]: https://jsr.io/@nodef/extra-map/doc/~/map
+[map$]: https://jsr.io/@nodef/extra-map/doc/~/map$
+[reduce]: https://jsr.io/@nodef/extra-map/doc/~/reduce
+[filter]: https://jsr.io/@nodef/extra-map/doc/~/filter
+[filter$]: https://jsr.io/@nodef/extra-map/doc/~/filter$
+[filterAt]: https://jsr.io/@nodef/extra-map/doc/~/filterAt
+[filterAt$]: https://jsr.io/@nodef/extra-map/doc/~/filterAt$
+[reject]: https://jsr.io/@nodef/extra-map/doc/~/reject
+[reject$]: https://jsr.io/@nodef/extra-map/doc/~/reject$
+[rejectAt]: https://jsr.io/@nodef/extra-map/doc/~/rejectAt
+[rejectAt$]: https://jsr.io/@nodef/extra-map/doc/~/rejectAt$
+[flat]: https://jsr.io/@nodef/extra-map/doc/~/flat
+[flatMap]: https://jsr.io/@nodef/extra-map/doc/~/flatMap
+[zip]: https://jsr.io/@nodef/extra-map/doc/~/zip
+[partition]: https://jsr.io/@nodef/extra-map/doc/~/partition
+[partitionAs]: https://jsr.io/@nodef/extra-map/doc/~/partitionAs
+[chunk]: https://jsr.io/@nodef/extra-map/doc/~/chunk
+[concat]: https://jsr.io/@nodef/extra-map/doc/~/concat
+[concat$]: https://jsr.io/@nodef/extra-map/doc/~/concat$
+[join]: https://jsr.io/@nodef/extra-map/doc/~/join
+[isDisjoint]: https://jsr.io/@nodef/extra-map/doc/~/isDisjoint
+[unionKeys]: https://jsr.io/@nodef/extra-map/doc/~/unionKeys
+[union]: https://jsr.io/@nodef/extra-map/doc/~/union
+[union$]: https://jsr.io/@nodef/extra-map/doc/~/union$
+[intersectionKeys]: https://jsr.io/@nodef/extra-map/doc/~/intersectionKeys
+[intersection]: https://jsr.io/@nodef/extra-map/doc/~/intersection
+[intersection$]: https://jsr.io/@nodef/extra-map/doc/~/intersection$
+[difference]: https://jsr.io/@nodef/extra-map/doc/~/difference
+[difference$]: https://jsr.io/@nodef/extra-map/doc/~/difference$
+[symmetricDifference]: https://jsr.io/@nodef/extra-map/doc/~/symmetricDifference
+[symmetricDifference$]: https://jsr.io/@nodef/extra-map/doc/~/symmetricDifference$
+[cartesianProduct]: https://jsr.io/@nodef/extra-map/doc/~/cartesianProduct
