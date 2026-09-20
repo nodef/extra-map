@@ -88,7 +88,7 @@ import {
   symmetricDifference,
   symmetricDifference$,
   cartesianProduct,
-} from "../src";
+} from ".";
 
 
 
