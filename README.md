@@ -2,7 +2,7 @@ A group of functions for working with Maps.<br>
 
 ▌
 📦 [JSR](https://jsr.io/@nodef/extra-map),
-📦 [NPM](https://www.npmjs.com/package/extra-map),
+📦 [NPM](https://www.npmjs.com/package/@nodef/extra-map),
 📰 [Docs](https://jsr.io/@nodef/extra-map/doc).
 
 A [Map] is a collection of key-value pairs, with unique keys. This package
